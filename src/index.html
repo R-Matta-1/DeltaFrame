@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./style.css" rel="stylesheet">
-  <script src="https://unpkg.com/vis-network@latest/standalone/vis.min.js"></script>
+  <script
+  type="text/javascript"
+  src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
+></script>
 </head>
-<body class="dark:bg-sky-100">
+<body class="bg-sky-200">
 
-    <div class="container mx-auto px-4 py-8">
- <div class="grid grid-cols-12 grid-rows-2 border border-color-grey-300 gap-2 mx-auto">
+    <div class="grid grid-cols-12 grid-rows-1 border border-color-grey-300 container mx-auto px-4 py-3">
+
             <div class="col-span-3">
                 <div class="bg-white rounded-lg p-4">
                     <h2 class="text-lg font-bold mb-4">Media Library</h2>
@@ -45,12 +48,13 @@
                 </div>
 
             </div><!--end of player-->
+        </div> <!--end of grid-->
            
-            <div class="bg-white col-span-12 w-full rounded-lg">
-              <canvas id="canvas" class="w-full"></canvas>
+            <div class="bg-white col-span-12  rounded-lg">
+              <div id="graphNetwork" class="h-full"></div>
           </div>
           
-        </div> <!--end of grid-->
     </div>
 </body>
+<script src="main.js"></script>
 </html>
