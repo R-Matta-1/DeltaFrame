@@ -21,7 +21,7 @@ var edges = new vis.DataSet([
 ]);
 
 var options = {
-
+manipulation:{enable: true, deleteEdge:true}
 }
 
 var container = document.getElementById('graphNetwork');
@@ -34,4 +34,5 @@ var network = new vis.Network(container, data, options);
 
 function CreateNode() {
     console.log(document.getElementById("FunctionAction"))
+
 }
