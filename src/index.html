@@ -10,49 +10,40 @@
 ></script>
 </head>
 <body class="bg-sky-200">
+  
+  <div class="grid grid-cols-8 grid-rows-1 border border-color-grey-300 container h-full w-full mx-auto gap-2">
+    
+    
+    
+    <div class="bg-white col-span-5  rounded-lg">
+      <div id="graphNetwork" class="w-full"></div>
+     
 
-    <div class="grid grid-cols-12 grid-rows-1 border border-color-grey-300 container mx-auto px-4 py-3">
+       <div class="bg-white rounded-lg p-4">
+           <video id="videoPlayer" class="w-full" controls></video>
 
-            <div class="col-span-3">
-                <div class="bg-white rounded-lg p-4">
-                    <h2 class="text-lg font-bold mb-4">Media Library</h2>
-                    <input type="file" id="fileInput" class="block w-full p-2 text-gray-700 bg-gray-200 rounded-lg" />
-                    <ul id="mediaList" class="mt-4">
-                        </ul>
-                </div>
-            </div><!--end of  file input-->
+       </div><!--end of player-->
+              </div>
 
-            <div class="col-span-3">
-                <div class="bg-white rounded-lg p-4">
-                    <h2 class="text-lg font-bold mb-4">Editing Tools</h2>
-                    <div class="flex flex-col space-y-2">
-                        <label class="flex items-center">
-                            <input type="checkbox" class="mr-2 form-checkbox">
-                            <span>Mute Audio</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" class="mr-2 form-checkbox">
-                            <span>Reverse Video</span>
-                        </label>
-                        <div class="flex items-center">
-                            <label class="mr-2">Speed:</label>
-                            <input type="range" min="0.25" max="2" step="0.25" class="w-full">
-                        </div>
-                        </div>
-                </div>
+
+
+            <div class="col-span-3 center">
+              <div class="bg-white rounded-lg p-4 max-h-screen overflow-y-auto">
+                <h2 class="text-lg font-bold mb-4 text-center">Editing Tools</h2>
+                <div id="FunctionAction" class=" text-xs items-center flex flex-col space-y-2 shadow-lg rounded-sm bg-indigo-300 shrink-1">
+             
+Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatibus, molestiae. Quibusdam tempore sed dolores. Saepe cumque ipsum id fugit vitae officiis, pariatur laudantium omnis et eius suscipit inventore, nisi repellat.
+
+               </div>
+                <button onclick="CreateNode()" class="mt-4 bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full">
+                  Create Node
+                </button>
+              </div>
             </div><!--end of  node creation-->
 
-            <div class="col-span-6">
-                <div class="bg-white rounded-lg p-4">
-                    <video id="videoPlayer" class="w-full" controls></video>
-                </div>
 
-            </div><!--end of player-->
-        </div> <!--end of grid-->
-           
-            <div class="bg-white col-span-12  rounded-lg">
-              <div id="graphNetwork" class="h-full"></div>
-          </div>
+            
+       <!--e </div> nd of grid-->
           
     </div>
 </body>
