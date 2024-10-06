@@ -2,11 +2,17 @@
 a functinal graph based video editor, the idea is that each node is a function traveling from start to finish
 
 ### todo
-- ffmpeg.js
-- editing nodes needs to be easier
-    - can't delete start and end nodes
-    - node creation and deletion
-    - nodes hold metadata on thier funcitonality
-    - node compression
-    - placing nodes in between edges
-    - edge creation and deletion
+Graph:
+
+- Create nodes, store properties.
+- Connect nodes, validate connections.
+- Delete nodes, update related elements.
+Editor:
+
+- Create sidebar, display properties.
+- Edit properties, validate input.
+- Implement operation-based nodes, connect input nodes.
+Interactions:
+
+- Select nodes, update sidebar.
+- Update properties, update connections.

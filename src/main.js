@@ -1,38 +1,43 @@
-console.log("hello Setup\n world")
+var cy = cytoscape({
 
-
-var nodes = new vis.DataSet([
-    {id: 0, label:"Start" ,
-         fixed:{x : true , y:true},
-         x:0,y:0
-          ,shape:"diamond"},
-
-    {id:2 , label:"f(Start) -> end"},
-
-    {id: 1, label:"Final Product" ,
-          fixed:{x : true , y:true},
-        x:1000,y:0
-          ,shape:"diamond"}
-]);
-
-var edges = new vis.DataSet([
-    {from:0 ,to:2},
-    {from:2, to:1}
-]);
-
-var options = {
-manipulation:{enable: true, deleteEdge:true}
-}
-
-var container = document.getElementById('graphNetwork');
-
-var data = {
-    nodes:nodes,
-    edges:edges
-};
-var network = new vis.Network(container, data, options);
-
-function CreateNode() {
-    console.log(document.getElementById("FunctionAction"))
-
-}
+    container: document.getElementById('cy'), // container to render in
+  
+    elements: [ // list of graph elements to start with
+      { // node a
+        data: { id: 'Start' }
+      },
+      { // node b
+        data: { id: 'Final' }
+      },
+      { // edge ab
+        data: { id: 'ab', source: 'Start', target: 'Final' }
+      }
+    ],
+  
+    style: [ // the stylesheet for the graph
+      {
+        selector: 'node',
+        style: {
+          'background-color': '#666',
+          'label': 'data(id)'
+        }
+      },
+  
+      {
+        selector: 'edge',
+        style: {
+          'width': 3,
+          'line-color': '#ccc',
+          'target-arrow-color': '#ccc',
+          'target-arrow-shape': 'triangle',
+          'curve-style': 'bezier'
+        }
+      }
+    ],
+  
+    layout: {
+      name: 'grid',
+      rows: 1
+    }
+  
+  });
