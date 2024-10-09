@@ -4,7 +4,8 @@ a functinal graph based video editor, the idea is that each node is a function t
 ### todo
 Graph:
 
-- Create nodes, store properties.
+- Create nodes,
+- use `cy.data()` to write more data on nodes
 - Connect nodes, validate connections.
 - Delete nodes, update related elements.
 Editor:
