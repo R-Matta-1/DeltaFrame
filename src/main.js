@@ -28,16 +28,18 @@ var cy = cytoscape({
     layout: { name: 'grid', rows: 1}
   });
 
-
+var num=0
 function CreateNode(){
   cy.add({
-    data:{id:'another'},
+    data:{id:'another'+(++num)},
     position:averageGridCenter()
    }) //position =  average pos of all obj
 }
 
 averageGridCenter = () => {
-  FakeConsole.innerHTML =JSON.stringify(cy.nodes("[]"))
+  for (let i =0 ; i < cy.nodes().length;i++){
+    console.log(cy.nodes()[i].position("x"))
+  }
 
   return {x:0,y:0}
 }
