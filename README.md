@@ -1,19 +1,30 @@
-# video editor 
-a functinal graph based video editor, the idea is that each node is a function traveling from start to finish
+# DeltaFrame
+###### A node based visual programming language for editing video content
+---
 
-### todo
-Graph:
+# vision
 
-- Create nodes,
-- use `cy.data()` to write more data on nodes
-- Connect nodes, validate connections.
-- Delete nodes, update related elements.
-Editor:
+## node sidebar
+- TypeOfNode dropdown
+- name of node (should be mutable)
+- MediaOrigin (input video!)
+- function (operation on a video, transform, shift, cut, invert)
+- 2 input operator (add two vids, averaging )
 
-- Create sidebar, display properties.
-- Edit properties, validate input.
-- Implement operation-based nodes, connect input nodes.
-Interactions:
+- all of this followed by an update (or create) button, puting the data of this side bar into the node.
 
-- Select nodes, update sidebar.
-- Update properties, update connections.
+update button at bottom
+
+
+-----------------------
+# error system
+- ex. (this function has two children!)
+- nodes with errors turn red
+- a log is left in the top right 
+
+---
+# general organization
+
+video editing/preview station
+- selecting  a node you recive the option to turn on preview, playing the video in a sticky div atached to the node, 
+- consider organizing room for a big preview and image-preview scrubber bar 
