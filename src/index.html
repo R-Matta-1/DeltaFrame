@@ -11,29 +11,46 @@
   </div>
 
   <div id="sidebar">
-	
-
     <div id="nodeData">
-        <label for="node-Name">Node Name:</label>
-        <input type="text" id="node-Name" placeholder="New Node's Name">
+      <label for="node-Name">Node Name:</label>
+      <input type="text" id="node-Name" placeholder="New Node's Name">
 
-        <label for="Type">Node Type:</label>
-        <select id="Type" name="node type">
-            <option value="input">Input</option>
-            <option value="display">Display</option>
-            <option value="function">Function</option>
-            <option value="operation">Operation</option>
-        </select>
-		
+      <label for="Type">Node Type:</label>
+      <select id="Type" name="node type">
+          <option value="input">Input</option>
+          <option value="display">Display</option>
+          <option value="function">Function</option>
+          <option value="operation">Operation</option>
+  </select>
+  
+    
+    <div hidden id = 'nodeInput'>
+      <input type="file" name="videoInput" id="videoInput">
     </div>
 
-    <button>Upload Media</button>
-    <button onclick="CreateNode()">Create Node</button>
+    <div hidden id="nodeDisplay">
+      <video src=""></video>
+      <p>download button here</p>
 
-    
+    </div hidden id = "nodefunction">
+    <select name="functionOptions" id="functionOptions">
+      <option value=" ">Function</option>
+      <option value="Filter">isolat eChanel</option>
+      <option value="RemoveColor">removeColor</option>
+      <option value="Tint">removeColor</option>
+      <option value="TranslateTime">TranslateTime</option>
+      <option value="TranslateSpace">TranslateSpace</option>
+      <option value="Speed">Speed</option>
+    </select>
+    <div>
+
+    </div>
+
 </div>
+    <button>UploadMedia</button>
+    <button onclick="CreateNode()">CreateNode</button>
 
-
+  </div>
 
 </body>
 <script src="main.js"></script>

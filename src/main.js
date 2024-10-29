@@ -82,7 +82,7 @@ function CreateNode(){ // add custom name, custom metadata
 }
 
 function makeUniqueID(IDBase) {
-  return "AAAAAAAAAAAAAAAW" //todo
+  return (cy.$id(IDBase).length ==0)? IDBase : makeUniqueID(IDBase+" ")//todo
 }
 
 function BeginEdgeSelection(node,x,y) {
