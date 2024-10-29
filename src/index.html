@@ -11,26 +11,30 @@
   </div>
 
   <div id="sidebar">
+	
+
     <div id="nodeData">
-    <input type="text" id="node-Name">love</input>
+        <label for="node-Name">Node Name:</label>
+        <input type="text" id="node-Name" placeholder="New Node's Name">
 
-    <select id="Type" name="cars">
-      <option value="input">input</option>
-      <option value="display">display</option>
-      <option value="funcion">funcion</option>
-      <option value="operation">operation</option>
-    </select>
+        <label for="Type">Node Type:</label>
+        <select id="Type" name="node type">
+            <option value="input">Input</option>
+            <option value="display">Display</option>
+            <option value="function">Function</option>
+            <option value="operation">Operation</option>
+        </select>
+		
+    </div>
+
+    <button>Upload Media</button>
+    <button onclick="CreateNode()">Create Node</button>
+
     
-    <div></div>
-
-
 </div>
-    <button>UploadMedia</button>
-    <button onclick="CreateNode()">CreateNode</button>
-
-  </div>
 
 
-<button>Update</button></body>
+
+</body>
 <script src="main.js"></script>
 </html>

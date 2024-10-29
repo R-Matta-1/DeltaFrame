@@ -1,7 +1,6 @@
 const FakeConsole = document.getElementById("trash")
 
 const EdgeCreationToggleBtn = document.getElementById("EdgeCreationToggleBtn");
-var uniqueIdNumber=0
 const mouseFollowerNodeId = `MouseFollower${Math.random()}`
 
 var cy = cytoscape({
@@ -69,27 +68,38 @@ cy.on("cxttap" , "edge"  , function(evt){
 document.addEventListener('click',function(event){
   console.log("click")
   EndEdgeSelection()
-
 })
 
 function CreateNode(){ // add custom name, custom metadata
+  nodeId = document.getElementById("node-Name").value
+
+ nodeId = makeUniqueID(nodeId)
+
     cy.add({
-    data:{id:'another'+ (++uniqueIdNumber)}, // unique id
+    data:{id:nodeId}, // unique id
     position:averageGridCenter()
    }) //position =  average pos of all obj
 }
 
-
+function makeUniqueID(IDBase) {
+  return "AAAAAAAAAAAAAAAW" //todo
+}
 
 function BeginEdgeSelection(node,x,y) {
 	SelectedNode = node;
         console.log("node selected: " + SelectedNode.id())
+
 		cy.add({group:"nodes", 
 			data:{id:mouseFollowerNodeId },style:{ visibility: 'hidden'},
 			position:{x:x , y:y},
 			
 		})
-		cy.add({group:"edges", data:{source: SelectedNode.id(), target: mouseFollowerNodeId}})
+
+		cy.add({group:"edges",
+       data:{
+        source: SelectedNode.id(), 
+        target: mouseFollowerNodeId}})
+
 
 		cy.on("vmousemove" , function (evt) {
 			console.log("move")
@@ -124,5 +134,3 @@ avgY /= length;
 
   return {x:avgX , y:avgY-50}
 }
-
-
