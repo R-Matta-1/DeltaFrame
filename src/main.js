@@ -1,7 +1,7 @@
-const FakeConsole = document.getElementById("trash")
-
 const EdgeCreationToggleBtn = document.getElementById("EdgeCreationToggleBtn");
 const mouseFollowerNodeId = `MouseFollower${Math.random()}`
+const NameInputBox = document.getElementById("node-Name")
+var SelectedNode  = "";
 
 var cy = cytoscape({
     container: document.getElementById('cy'), // container to render in
@@ -63,15 +63,22 @@ var SelectedNode = null;
 cy.on("cxttap" , "edge"  , function(evt){
   cy.remove(evt.target)
 })
+
+var TapWasDeltWith = false
+cy.on('tap',"node", function(evt){
+  TapWasOnNode = true
+  ChangeSelectedNode(evt.target.id())
   
+});
   
+// todo: create a click listener for the situation in which we need to lose focuse on a node
 document.addEventListener('click',function(event){
-  console.log("click")
-  EndEdgeSelection()
+ // EndEdgeSelection()
+ // ChangeSelectedNode("")
 })
 
 function CreateNode(){ // add custom name, custom metadata
-  nodeId = document.getElementById("node-Name").value
+  nodeId = "new Node"
 
  nodeId = makeUniqueID(nodeId)
 
@@ -116,21 +123,33 @@ function EndEdgeSelection(){
 	cy.removeListener("vmousemove")
 }
 
+function nameChange() {
+  if(SelectedNode != ""){
+    cy.$id(SelectedNode).json().id  = NameInputBox.value
+  }
+}
+
+function ChangeSelectedNode(newID) {
+  SelectedNode = newID
+  NameInputBox.value = newID
+  alert(newID)
+}
+
 averageGridCenter = () => {
   for (let i =0 ; i < cy.nodes().length; i++){
     console.log(cy.nodes()[i].position("x"))
   }
-let avgX =0;
-let avgY =0;
+  let avgX =0;
+  let avgY =0;
 
-cy.nodes().forEach(element => {
-  avgX += element.position().x;
-  avgY += element.position().y;
-});
-let length  = cy.nodes().length;
+  cy.nodes().forEach(element => {
+    avgX += element.position().x;
+    avgY += element.position().y;
+  });
+  let length  = cy.nodes().length;
 
-avgX /= length;
-avgY /= length;
+  avgX /= length;
+  avgY /= length;
 
   return {x:avgX , y:avgY-50}
 }

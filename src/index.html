@@ -12,7 +12,7 @@
 
   <div id="sidebar">
     <div id="nodeData">
-      <label for="node-Name">Node Name:</label>
+      <label for="node-Name" onchange="nameChange()">Node Name:</label>
       <input type="text" id="node-Name" placeholder="New Node's Name">
 
       <label for="Type">Node Type:</label>
@@ -32,23 +32,40 @@
       <video src=""></video>
       <p>download button here</p>
 
-    </div hidden id = "nodefunction">
-    <select name="functionOptions" id="functionOptions">
-      <option value=" ">Function</option>
-      <option value="Filter">isolat eChanel</option>
-      <option value="RemoveColor">removeColor</option>
-      <option value="Tint">removeColor</option>
-      <option value="TranslateTime">TranslateTime</option>
-      <option value="TranslateSpace">TranslateSpace</option>
-      <option value="Speed">Speed</option>
-    </select>
-    <div>
+    </div>
+
+
+    <div hidden id = "nodefunction">
+      <select name="functionOptions" id="functionOptions">
+        <option value=" ">Function</option>
+        <option value="Filter">isolate Chanel</option>
+        <option value="Invert">Invert</option>
+        <option value="RemoveColor">removeColor</option>
+        <option value="Tint">removeColor</option>
+        <option value="TranslateTime">TranslateTime</option>
+        <option value="TranslateSpace">TranslateSpace</option>
+        <option value="Speed">Speed</option>
+      </select>
 
     </div>
 
+    <div hidden id = "nodeOperation">
+      <select name="Operations" id="Operations">
+        <option value=" ">Operations</option>
+        <option value="Max">MaxPixel</option>
+        <option value="Min">MinPixel</option>
+        <option value="Avg">Average</option>
+        <option value="Add">Add</option>
+        <option value="Mult">Multiply</option>
+
+
+      </select>
+
+    </div>
 </div>
-    <button>UploadMedia</button>
-    <button onclick="CreateNode()">CreateNode</button>
+
+    <button onclick="CreateNode()">Create Node</button>
+    <button onclick="DeleteSelectedNode()">Delete Node</button>
 
   </div>
 
