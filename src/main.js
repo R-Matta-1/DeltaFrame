@@ -1,7 +1,6 @@
 const EdgeCreationToggleBtn = document.getElementById("EdgeCreationToggleBtn");
 const mouseFollowerNodeId = `MouseFollower${Math.random()}`
 const NameInputBox = document.getElementById("node-Name");
-var SelectedNode  = "";
 
 var cy = cytoscape({
     container: document.getElementById('cy'), // container to render in
@@ -33,56 +32,10 @@ var cy = cytoscape({
   cy.boxSelectionEnabled(false)
  
   
-var SelectedNode = null;
-  cy.on("cxttap", "node", function(evt) {
-    CurrentNode = evt.target
-
-    if (SelectedNode == null) {
-        // if thier is no previously selected node, make that this node
-        BeginEdgeSelection(CurrentNode,evt.position.x,evt.position.y)
-        return;
-    }
-    if (SelectedNode.id() != CurrentNode.id() &&
-        cy.elements(`edge[source = "${SelectedNode.id()}"][target = "${CurrentNode.id()}"]`).length == 0 &&
-        cy.elements(`edge[source = "${CurrentNode.id()}"][target = "${SelectedNode.id()}"]`).length == 0) {
-        // thier IS a node, if we are not looping it  AND thier is no identicle edge, create the edge
-
-        cy.add({
-            group: "edges",
-            data: {
-                source: SelectedNode.id(),
-                target: CurrentNode.id()
-            }
-        })
-        console.log('connection from:  ' + SelectedNode.id() + " to" + CurrentNode.id());
-		EndEdgeSelection()
-
-    }
-})
-
-cy.on("cxttap" , "edge"  , function(evt){
-  cy.remove(evt.target)
-})
-
 
   
-// todo: create a click listener for the situation in which we need to lose focuse on a node
-cy.on('tap',function(event){
-  if (event.target === cy) {
-    //alert("it's cy")
-    ChangeSelectedNode("") // lose focuse, 
-    return }
-  //todo: if node, change selected node
-  if(event.target.group() == "nodes"){
-  
-    ChangeSelectedNode(evt.target.id())
-  }
-  
-  //EndEdgeSelection()
-})
-
-function CreateNode(){ // add custom name, custom metadata
-  nodeId = "new Node"
+  function CreateNode(){ // add custom name, custom metadata
+  nodeId = NameInputBox.value
 
  nodeId = makeUniqueID(nodeId)
 
@@ -94,52 +47,9 @@ function CreateNode(){ // add custom name, custom metadata
 
 function makeUniqueID(IDBase) {
       //if the dose not already exist, it's valid, else, add a space and repeat
-  return (cy.$id(IDBase).length ==0)? IDBase : makeUniqueID(IDBase+" ")
-}
+      return (cy.$id(IDBase).length ==0)? IDBase : makeUniqueID(IDBase+" ")
+    }
 
-
-function nameFromInputToSelected() {
-  if(SelectedNode != ""){
-    // cy.$id(SelectedNode).json().id  = NameInputBox.value
-  }
-}
-
-function ChangeSelectedNode(newID) {
-  SelectedNode = newID
-  alert( NameInputBox.value) //= newID
-  
-}
-
-function BeginEdgeSelection(node,x,y) {
-  SelectedNode = node;
-        console.log("node selected: " + SelectedNode.id())
-
-    cy.add({group:"nodes", 
-      data:{id:mouseFollowerNodeId },style:{ visibility: 'hidden'},
-      position:{x:x , y:y},
-      
-    })
-
-    cy.add({group:"edges",
-       data:{
-        source: SelectedNode.id(), 
-        target: mouseFollowerNodeId}})
-
-
-    cy.on("vmousemove" , function (evt) {
-      console.log("move")
-      if (cy.nodes(`[id = "${mouseFollowerNodeId}"]`).length !=0) {
-        cy.nodes(`[id = "${mouseFollowerNodeId}"]`).position({x:evt.position.x , y:evt.position.y})
-      }
-    })
-}
-function EndEdgeSelection(){
-  console.log("SelectedNode reset")
-  SelectedNode = null
-  cy.remove(`node[id = "${mouseFollowerNodeId}"]`);
-  cy.remove(`edge[target = "${mouseFollowerNodeId}"]`);
-  cy.removeListener("vmousemove")
-}
 
 averageGridCenter = () => {
   for (let i =0 ; i < cy.nodes().length; i++){
@@ -153,9 +63,104 @@ averageGridCenter = () => {
     avgY += element.position().y;
   });
   let length  = cy.nodes().length;
-
+  
   avgX /= length;
   avgY /= length;
 
   return {x:avgX , y:avgY-50}
 }
+
+////////////
+//// regular click zone
+////////////
+
+cy.on('tap',function(event){
+if (event.target === cy) {
+console.log("tapped cy (backround)")
+ 	KillEdgeSelectors()
+ } else {
+    return
+  }})
+
+cy.on('tap',"node",function(event){
+console.log(`node tap of: ${event.target.id()}`)
+    })
+
+cy.on('tap',"edge",function(event){
+console.log(`edge tap of: ${event.target.id()}`)
+
+
+})
+
+
+
+////everything relating to the right click 
+cy.on("cxttap" , "edge"  , function(evt){
+	cy.remove(evt.target)
+	})
+//////////
+///Right click node focuse that selects edges and creates effect
+//////////
+
+var Right_Focuse_Node_Id = ""
+
+cy.on("cxttap", "node", function(evt) {
+	let CurrentNode = evt.target
+
+	if (Right_Focuse_Node_Id == "") {
+		// if thier is no previously selected node, make that this node
+	      Right_Focuse_Node_Id = CurrentNode.id()
+        // add an invisible node that always follows the mouse
+        cy.add(
+        {group:"nodes", 
+        data:{id:mouseFollowerNodeId },
+        style:{ visibility: 'hidden'},
+        position: evt.position,
+      })
+  
+      //add a visible node that is connected
+      cy.add({group:"edges",
+         data:{
+          source: CurrentNode.id(), 
+          target: mouseFollowerNodeId}
+      })
+  
+      cy.on("vmousemove" , function (evt) {
+        
+        if (cy.nodes(`[id = "${mouseFollowerNodeId}"]`).length !=0) {
+          cy.nodes(`[id = "${mouseFollowerNodeId}"]`).position(evt.position)
+        }
+      })
+
+  return;
+	}
+  
+  // if thier is a node in Right_Focuse_Node_Id this will run
+
+  if (Right_Focuse_Node_Id != CurrentNode.id() && 
+		cy.elements(`edge[source = "${Right_Focuse_Node_Id}"][target = "${CurrentNode.id()}"]`).length == 0 &&
+		cy.elements(`edge[source = "${CurrentNode.id()}"][target = "${Right_Focuse_Node_Id}"]`).length == 0) {
+		// thier IS a node, if we are not looping it  AND thier is no identicle edge, create the edge
+
+// a ctually creating the edge
+		cy.add({
+			group: "edges",
+			data: {
+				source: Right_Focuse_Node_Id,
+				target: CurrentNode.id()
+			}
+		})
+
+    // reset evrything to red
+	KillEdgeSelectors()
+
+	}
+})
+
+function KillEdgeSelectors() {
+	        Right_Focuse_Node_Id = "";
+    cy.remove(`node[id = "${mouseFollowerNodeId}"]`);
+    cy.remove(`edge[target = "${mouseFollowerNodeId}"]`);
+    cy.removeListener("vmousemove")
+}
+
