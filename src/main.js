@@ -1,6 +1,6 @@
 const EdgeCreationToggleBtn = document.getElementById("EdgeCreationToggleBtn");
 const mouseFollowerNodeId = `MouseFollower${Math.random()}`
-const NameInputBox = document.getElementById("node-Name")
+const NameInputBox = document.getElementById("node-Name");
 var SelectedNode  = "";
 
 var cy = cytoscape({
@@ -64,17 +64,21 @@ cy.on("cxttap" , "edge"  , function(evt){
   cy.remove(evt.target)
 })
 
-var TapWasDeltWith = false
-cy.on('tap',"node", function(evt){
-  TapWasOnNode = true
-  ChangeSelectedNode(evt.target.id())
-  
-});
+
   
 // todo: create a click listener for the situation in which we need to lose focuse on a node
-document.addEventListener('click',function(event){
- // EndEdgeSelection()
- // ChangeSelectedNode("")
+cy.on('tap',function(event){
+  if (event.target === cy) {
+    //alert("it's cy")
+    ChangeSelectedNode("") // lose focuse, 
+    return }
+  //todo: if node, change selected node
+  if(event.target.group() == "nodes"){
+  
+    ChangeSelectedNode(evt.target.id())
+  }
+  
+  //EndEdgeSelection()
 })
 
 function CreateNode(){ // add custom name, custom metadata
@@ -89,50 +93,52 @@ function CreateNode(){ // add custom name, custom metadata
 }
 
 function makeUniqueID(IDBase) {
-  return (cy.$id(IDBase).length ==0)? IDBase : makeUniqueID(IDBase+" ")//todo
+      //if the dose not already exist, it's valid, else, add a space and repeat
+  return (cy.$id(IDBase).length ==0)? IDBase : makeUniqueID(IDBase+" ")
 }
 
-function BeginEdgeSelection(node,x,y) {
-	SelectedNode = node;
-        console.log("node selected: " + SelectedNode.id())
 
-		cy.add({group:"nodes", 
-			data:{id:mouseFollowerNodeId },style:{ visibility: 'hidden'},
-			position:{x:x , y:y},
-			
-		})
-
-		cy.add({group:"edges",
-       data:{
-        source: SelectedNode.id(), 
-        target: mouseFollowerNodeId}})
-
-
-		cy.on("vmousemove" , function (evt) {
-			console.log("move")
-			if (cy.nodes(`[id = "${mouseFollowerNodeId}"]`).length !=0) {
-				cy.nodes(`[id = "${mouseFollowerNodeId}"]`).position({x:evt.position.x , y:evt.position.y})
-			}
-		})
-}
-function EndEdgeSelection(){
-	console.log("SelectedNode reset")
-	SelectedNode = null
-	cy.remove(`node[id = "${mouseFollowerNodeId}"]`);
-	cy.remove(`edge[target = "${mouseFollowerNodeId}"]`);
-	cy.removeListener("vmousemove")
-}
-
-function nameChange() {
+function nameFromInputToSelected() {
   if(SelectedNode != ""){
-    cy.$id(SelectedNode).json().id  = NameInputBox.value
+    // cy.$id(SelectedNode).json().id  = NameInputBox.value
   }
 }
 
 function ChangeSelectedNode(newID) {
   SelectedNode = newID
-  NameInputBox.value = newID
-  alert(newID)
+  alert( NameInputBox.value) //= newID
+  
+}
+
+function BeginEdgeSelection(node,x,y) {
+  SelectedNode = node;
+        console.log("node selected: " + SelectedNode.id())
+
+    cy.add({group:"nodes", 
+      data:{id:mouseFollowerNodeId },style:{ visibility: 'hidden'},
+      position:{x:x , y:y},
+      
+    })
+
+    cy.add({group:"edges",
+       data:{
+        source: SelectedNode.id(), 
+        target: mouseFollowerNodeId}})
+
+
+    cy.on("vmousemove" , function (evt) {
+      console.log("move")
+      if (cy.nodes(`[id = "${mouseFollowerNodeId}"]`).length !=0) {
+        cy.nodes(`[id = "${mouseFollowerNodeId}"]`).position({x:evt.position.x , y:evt.position.y})
+      }
+    })
+}
+function EndEdgeSelection(){
+  console.log("SelectedNode reset")
+  SelectedNode = null
+  cy.remove(`node[id = "${mouseFollowerNodeId}"]`);
+  cy.remove(`edge[target = "${mouseFollowerNodeId}"]`);
+  cy.removeListener("vmousemove")
 }
 
 averageGridCenter = () => {
