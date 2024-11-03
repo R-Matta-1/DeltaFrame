@@ -1,6 +1,3 @@
-const EdgeCreationToggleBtn = document.getElementById("EdgeCreationToggleBtn");
-const mouseFollowerNodeId = `MouseFollower${Math.random()}`
-const NameInputBox = document.getElementById("node-Name");
 
 var cy = cytoscape({
     container: document.getElementById('cy'), // container to render in
@@ -34,16 +31,7 @@ var cy = cytoscape({
   
 
   
-  function CreateNode(){ // add custom name, custom metadata
-  nodeId = NameInputBox.value
 
- nodeId = makeUniqueID(nodeId)
-
-    cy.add({
-    data:{id:nodeId}, // unique id
-    position:averageGridCenter()
-   }) //position =  average pos of all obj
-}
 
 function makeUniqueID(IDBase) {
       //if the dose not already exist, it's valid, else, add a space and repeat
@@ -80,7 +68,8 @@ console.log("tapped cy (backround)")
  	KillEdgeSelectors()
  } else {
     return
-  }})
+  }
+})
 
 cy.on('tap',"node",function(event){
 console.log(`node tap of: ${event.target.id()}`)
@@ -88,19 +77,99 @@ console.log(`node tap of: ${event.target.id()}`)
 
 cy.on('tap',"edge",function(event){
 console.log(`edge tap of: ${event.target.id()}`)
-
-
 })
 
+///////////
+/// Get / Set node Data
+//////////
+
+const ActionType = {
+	Undefined: "",
+	Functional: 'functional',
+	Display: 'display',
+	Input: 'input',
+	Operator: 'operator'
+  };
+
+const OperatorType = {
+	Undefined:'',
+	Max:"Max",
+	Min:"Min",
+	Avg:"Avg",
+	Add:"Add",
+	Mul:"Mult",
+}
+const FunctionType = {
+	Undefined:'',
+	Filter		 	:"Filter" ,
+	Invert		 	:"Invert" ,
+	RemoveColor	 	:"RemoveColor" ,
+	Tint		 	:"Tint" ,
+	TranslateTime 	:"TranslateTime" ,
+	TranslateSpace 	:"TranslateSpace" ,
+	Speed		 	:"Speed" ,
+}
+
+const NameInputBox = document.getElementById("node-Name");
+const VideoInput = document.getElementById("videoInput");
+const NodeActionInput = document.getElementById("Type");
+const NodeFunctionInput = document.getElementById("functionOptions");
+const NodeOperationInput = document.getElementById("Operations");
+
+var FocusNodeid = "";
+
+// in the event no node is focused on, this data should be displayed
+var noNodeFocusData = {
+	Name:"Defualt Node",
+	Action:ActionType.Undefined , 
+	VideoLink :'',
+	VideoOutput:'',
+	Function: FunctionType.Undefined,
+	FunctionParams:"",
+	Operation: OperatorType.Undefined,
+}
+
+// would work to run ShowNodeData(GetNodeData) 
+function SetDisplayData(NodeData) {
+	
+}
+
+function GetNodeData(NodeId) {
+	
+}
+
+function GetDisplayData() {
+	
+}
+
+function SetNodeDataFromDisplay(NodeId) {
+	
+}
+
+function CreateNode(){ // add custom name, custom metadata
+	nodeId = NameInputBox.value
+  
+   nodeId = makeUniqueID(nodeId)
+  
+	  cy.add({ // ALTER SCRATCH
+	  data:{id:nodeId},
+	  position:averageGridCenter()
+	 }) 
+  }
 
 
+
+///////////
 ////everything relating to the right click 
+///////////
+
 cy.on("cxttap" , "edge"  , function(evt){
 	cy.remove(evt.target)
 	})
 //////////
 ///Right click node focuse that selects edges and creates effect
 //////////
+const mouseFollowerNodeId = `MouseFollower${Math.random()}`
 
 var Right_Focuse_Node_Id = ""
 

@@ -7,7 +7,7 @@
     z-index: -1;
     top: 0;
     left: var(--sidebar-width); /* Offset by the sidebar width */
-    width: calc(100% - var(--sidebar-width)); /* Occupy remaining width */
+    width: calc(99.9% - var(--sidebar-width)); /* Occupy remaining width */
     height: 100vh;
     background-color: #cdcdcd;
     box-sizing: border-box;

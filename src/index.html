@@ -17,15 +17,16 @@
 
       <label for="Type">Node Type:</label>
       <select id="Type" name="node type">
+          <option value="">Action?</option>
           <option value="input">Input</option>
           <option value="display">Display</option>
           <option value="function">Function</option>
-          <option value="operation">Operation</option>
+          <option value="operator">Operation</option>
   </select>
   
     
     <div hidden id = 'nodeInput'>
-      <input type="file" name="videoInput" id="videoInput">
+      <input type="file" name="videoInput" id="videoInput" multiple>
     </div>
 
     <div hidden id="nodeDisplay">
@@ -37,7 +38,7 @@
 
     <div hidden id = "nodefunction">
       <select name="functionOptions" id="functionOptions">
-        <option value=" ">Function</option>
+        <option value="">Function</option>
         <option value="Filter">isolate Chanel</option>
         <option value="Invert">Invert</option>
         <option value="RemoveColor">removeColor</option>
@@ -51,7 +52,7 @@
 
     <div hidden id = "nodeOperation">
       <select name="Operations" id="Operations">
-        <option value=" ">Operations</option>
+        <option value="">Operations</option>
         <option value="Max">MaxPixel</option>
         <option value="Min">MinPixel</option>
         <option value="Avg">Average</option>
