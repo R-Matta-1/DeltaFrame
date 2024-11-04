@@ -109,54 +109,124 @@ const FunctionType = {
 	TranslateSpace 	:"TranslateSpace" ,
 	Speed		 	:"Speed" ,
 }
-
-const NameInputBox = document.getElementById("node-Name");
-const VideoInput = document.getElementById("videoInput");
-const NodeActionInput = document.getElementById("Type");
-const NodeFunctionInput = document.getElementById("functionOptions");
+ /// alll input fields 
+const NameInputBox		 = document.getElementById("node-Name");
+const VideoInput 		 = document.getElementById("videoInput");
+const NodeActionInput 	 = document.getElementById("Type");
+const NodeFunctionInput  = document.getElementById("functionOptions");
 const NodeOperationInput = document.getElementById("Operations");
 
-var FocusNodeid = "";
+
+// all storage boxes
+const InputDataBox 		= document.getElementById("nodeInput");
+const DisplayDataBox 	= document.getElementById("nodeDisplay");
+const FunctionDataBox 	= document.getElementById("nodefunction");
+const OperatorDataBox 	= document.getElementById("nodeOperation");
+
+NodeActionInput.addEventListener("input" , (event) => {
+	SetNodeDataFromDisplay(FocusNodeid)
+
+	let newValue = NodeActionInput.value;
+	InputDataBox.hidden	  =true;
+	DisplayDataBox.hidden =true;
+	FunctionDataBox.hidden=true;
+	OperatorDataBox.hidden=true;
+	
+	switch (newValue) {
+		case ActionType.Functional:
+			FunctionDataBox.hidden=false;
+			break;
+
+		case ActionType.Display:
+			DisplayDataBox.hidden =false;
+			break;
+
+		case ActionType.Input:
+			InputDataBox.hidden	  = false;
+			break;
+
+		case ActionType.Operator:
+			OperatorDataBox.hidden=false;
+		break;
+		default:
+			console.log("defualt or unacounted value")
+			break;
+	}
+	
+})
 
 // in the event no node is focused on, this data should be displayed
-var noNodeFocusData = {
-	Name:"Defualt Node",
-	Action:ActionType.Undefined , 
-	VideoLink :'',
-	VideoOutput:'',
-	Function: FunctionType.Undefined,
-	FunctionParams:"",
-	Operation: OperatorType.Undefined,
+
+
+class NodeScratchData {
+  constructor(Id,
+            Action = ActionType.Undefined,
+       		VideoLink = "" ,
+			VideoOutput = "",
+			Function = FunctionType.Undefined,
+			FunctionParams = "",
+			Operation = OperatorType.Undefined,	
+			) {
+	this.Id				= Id;
+	this.Action			= Action;
+	this.VideoLink 		= VideoLink ;
+	this.VideoOutput	= VideoOutput;
+	this.Function		= Function;
+	this.FunctionParams	= FunctionParams;
+	this.Operation		= Operation;
+  }
 }
+
+var FocusNodeid = "";
+var DefualtNodeData = new NodeScratchData();
 
 // would work to run ShowNodeData(GetNodeData) 
 function SetDisplayData(NodeData) {
-	
+		NameInputBox.value = NodeData.Id
+		NodeActionInput.value = NodeData.Action
+		VideoInput.value = NodeData.VideoLink //define later
+   NodeFunctionInput.value = NodeData.Function // add func params
+  NodeOperationInput.value = NodeData.OperatorType
 }
 
 function GetNodeData(NodeId) {
-	
+	if(cy.$id(NodeId).length != 0 ){
+	cy.$id(NodeId).scratch("NodeScratchData")
+}
 }
 
 function GetDisplayData() {
-	
+return new NodeScratchData(	
+		NameInputBox.value,
+		NodeActionInput.value,
+		VideoInput.value, "" ,
+		NodeFunctionInput.value,
+		"", // function paramaters
+		NodeOperationInput.value)
 }
 
 function SetNodeDataFromDisplay(NodeId) {
-	
+	if(cy.$id(NodeId).length != 0 ){
+	let	NewData = GetDisplayData()
+
+		cy.$id(NodeId).scratch("NodeScratchData", NewData)
+		NameInputBox.value = NodeId
+	}
 }
 
 function CreateNode(){ // add custom name, custom metadata
-	nodeId = NameInputBox.value
+	NodeData = GetDisplayData()
   
-   nodeId = makeUniqueID(nodeId)
+   NodeData.Id = makeUniqueID(NodeData.Id)
   
 	  cy.add({ // ALTER SCRATCH
-	  data:{id:nodeId},
+	  data:{id: NodeData.Id },
 	  position:averageGridCenter()
 	 }) 
-  }
 
+	 SetNodeDataFromDisplay(NodeData.Id)
+
+  }
 
 
 ///////////
