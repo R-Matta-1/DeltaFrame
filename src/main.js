@@ -2,9 +2,9 @@
 var cy = cytoscape({
 	container: document.getElementById('cy'), // container to render in
 	elements: [ // list of graph elements to start with
-	  {data: { id: 'Start' }, style:{backgroundColor:"#D81E5B", shape:"hexagon"}}, //node
-	  {data: { id: 'Final' }, style:{backgroundColor:"#D81E5B", shape:"hexagon"}}, //node
-	  {data: { id: 'ab', source: 'Start', target: 'Final' }} // edge
+//	  {data: { id: 'Start' }, style:{backgroundColor:"#D81E5B", shape:"hexagon"}}, //node
+//	 {data: { id: 'Final' }, style:{backgroundColor:"#D81E5B", shape:"hexagon"}}, //node
+//	  {data: { id: 'ab', source: 'Start', target: 'Final' }} // edge
 	],
   style: [ {
 		selector: 'node',
@@ -77,8 +77,7 @@ var cy = cytoscape({
   
   cy.on('tap',"node",function(event){
 	FocusNodeid = event.target.id();
-	alert(FocusNodeid)
-	alert(JSON.stringify(GetNodeData(FocusNodeid)))
+
 	console.log(`node tap of: ${FocusNodeid}`)
 	SetDisplayData(GetNodeData(FocusNodeid))
   })
@@ -187,21 +186,7 @@ var cy = cytoscape({
   }
   var DefaultNodeData = new NodeScratchData("  ");
   
-  var StartNodeData = new NodeScratchData(
-	"Stnart",
-	ActionType.Input,"","",
-	FunctionType.Undefined,"",
-	OperatorType.Undefined)
-  
-  CreateNode(StartNodeData)
-  //
-  var EndNodeData = new NodeScratchData(
-	"Finnal",
-	ActionType.Display, "","",
-	FunctionType.Undefined,"",
-	OperatorType.Undefined)
-  
-  CreateNode(EndNodeData)
+
   
   // would work to run ShowNodeData(GetNodeData) 
   function SetDisplayData(NodeData) {
@@ -222,10 +207,10 @@ var cy = cytoscape({
 	return  cy.$id(NodeId).scratch("NodeScratchData")
 	
   } else {
-	alert("node D.N.E.")
+	console.log("node D.N.E.")
   }
   
-  
+  return DefaultNodeData;
   }
   
   function GetDisplayData() {
@@ -248,7 +233,7 @@ var cy = cytoscape({
   }}
   
   
-  function CreateNode(NodeData,position){ // add custom name, custom scratch
+  function CreateNode(NodeData , position){ // add custom name, custom scratch
 	if (typeof position === 'undefined'){
 	  position = averageGridCenter()
 	}
@@ -257,17 +242,41 @@ var cy = cytoscape({
   
 	cy.add({ // ALTER SCRATCH
 	data:{id: NodeData.Id },
-	position:    position = averageGridCenter()
+	position:  position 
+  }) 
   
-   }) 
-  
-   SetNodeDataFromDisplay(NodeData.Id)
+  cy.$id( NodeData.Id).scratch("NodeScratchData",NodeData)
   
   }
   
   function CreateNodeFromDisplayData() {
 	CreateNode(GetDisplayData());
   }
+
+
+
+  var StartNodeData = new NodeScratchData(
+	"Start",
+	ActionType.Input,"","",
+	FunctionType.Undefined,"",
+	OperatorType.Undefined)
+  
+  CreateNode(StartNodeData,  {x: cy.width()/2 , y:cy.height()/4 })
+  
+  var EndNodeData = new NodeScratchData(
+	"Final",
+	ActionType.Display, "","",
+	FunctionType.Undefined,"",
+	OperatorType.Undefined)
+  
+  CreateNode(EndNodeData, {x: cy.width()/2 , y:cy.height()*3/4 })
+
+  cy.add({group:"edges",
+	data:{
+	 source: "Start", 
+	 target: "Final"}
+ })
+  
   ///////////
   ////everything relating to the right click 
   ///////////
