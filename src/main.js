@@ -32,6 +32,7 @@ var cy = cytoscape({
     'border-color': '#a3f',
     'border-style': 'solid',
     'border-opacity': 1,
+	
   })
   .update();
 
@@ -192,13 +193,21 @@ function UpdateNodeClass(NodeId) {
   NodeActionInput.addEventListener("input" , updateSidebarAction); 
   NameInputBox.addEventListener("input" ,() =>{SetNodeDataFromDisplay(FocusNodeid)}); 
   
+
+  VideoInput 		.addEventListener("input",()=>{SetNodeDataFromDisplay(FocusNodeid)})
+  NodeFunctionInput .addEventListener("input",()=>{SetNodeDataFromDisplay(FocusNodeid)})
+  NodeOperationInput.addEventListener("input",()=>{SetNodeDataFromDisplay(FocusNodeid)})
+
+
+
+
   function updateSidebarAction(){
   SetNodeDataFromDisplay(FocusNodeid)
 
 
 
   InputDataBox.hidden	  =true;
-  DisplayDataBox.hidden =true;
+  DisplayDataBox.hidden	=true;
   FunctionDataBox.hidden=true;
   OperatorDataBox.hidden=true;
   
@@ -259,7 +268,7 @@ function UpdateNodeClass(NodeId) {
 	NodeActionInput.value = NodeData.Action
 	VideoInput.value = NodeData.VideoLink //define later
    NodeFunctionInput.value = NodeData.Function // add func params
-  NodeOperationInput.value = NodeData.OperatorType
+  NodeOperationInput.value = NodeData.Operation
  updateSidebarAction() 
   }
   
@@ -292,7 +301,7 @@ function UpdateNodeClass(NodeId) {
   function SetNodeDataFromDisplay(NodeId) {
  Node = cy.$id(NodeId);
 
-	if(cy.$id(NodeId).length != 0 ){
+	if(Node.length != 0 ){
 
   let	NewData = GetDisplayData()
   
@@ -304,7 +313,7 @@ function UpdateNodeClass(NodeId) {
   }}
   
   
-  function CreateNode(NodeData , position){ // add custom name, custom scratch
+function CreateNode(NodeData , position){ // add custom name, custom scratch
 	if (typeof position === 'undefined'){
 	  position = averageGridCenter()
 	}
@@ -315,16 +324,14 @@ function UpdateNodeClass(NodeId) {
 	data:{id: NodeData.Id },
 	position:  position 
   }) 
-  
   cy.$id( NodeData.Id).scratch("NodeScratchData",NodeData)
   cy.$id( NodeData.Id).addClass(NodeData.Action)
+  SetDisplayData(DefaultNodeData)
   }
   
-  function CreateNodeFromDisplayData() {
+function CreateNodeFromDisplayData() {
 	CreateNode(GetDisplayData());
   }
-
-
 
   var StartNodeData = new NodeScratchData(
 	"Start",
