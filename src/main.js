@@ -25,6 +25,45 @@ var cy = cytoscape({
   
 	layout: { name: 'grid', rows: 2}
   });
+  cy.style()
+  .selector('node.focused')
+  .style({
+    'border-width': '3px',
+    'border-color': '#a3f',
+    'border-style': 'solid',
+    'border-opacity': 1,
+  })
+  .update();
+
+
+  cy.style()
+  .selector('node.display')
+  .style({
+    'background-color': '#ED254E'
+  })
+  .update();
+
+cy.style()
+  .selector('node.functional')
+  .style({
+    'background-color': '#F9DC5C'
+  })
+  .update();
+
+cy.style()
+  .selector('node.operator')
+  .style({
+    'background-color': '#011936'
+  })
+  .update();
+
+cy.style()
+  .selector('node.input')
+  .style({
+    'background-color': '#465362'
+  })
+  .update();
+
   // selection box is a useless eye sore (unless I think of a use then it's just an eyesore)
   cy.boxSelectionEnabled(false)
   
@@ -68,7 +107,10 @@ var cy = cytoscape({
   if (event.target === cy) {
   console.log("tapped cy (backround)")
    KillEdgeSelectors();
+
+	cy.$id(FocusNodeid).removeClass("focused");
 	FocusNodeid = "";
+	
 	SetDisplayData(DefaultNodeData);
   } else {
 	return
@@ -76,7 +118,13 @@ var cy = cytoscape({
   })
   
   cy.on('tap',"node",function(event){
+
+	cy.$id(FocusNodeid).removeClass("focused");
+
 	FocusNodeid = event.target.id();
+
+	cy.$id(FocusNodeid).addClass("focused");
+
 
 	console.log(`node tap of: ${FocusNodeid}`)
 	SetDisplayData(GetNodeData(FocusNodeid))
@@ -85,17 +133,16 @@ var cy = cytoscape({
   cy.on('tap',"edge",function(event){
 	console.log(`edge tap of: ${event.target.id()}`)
   })
-  
   ///////////
   /// Get / Set node Data
   //////////
   
-  const ActionType = {
+  var ActionType = {
   Undefined: "",
-  Functional: 'functional',
-  Display: 'display',
-  Input: 'input',
-  Operator: 'operator'
+  Functional:	'functional',
+  Display: 		'display',
+  Input: 		'input',
+  Operator: 	'operator'
   };
   
   const OperatorType = {
@@ -130,15 +177,32 @@ var cy = cytoscape({
   const FunctionDataBox 	= document.getElementById("nodefunction");
   const OperatorDataBox 	= document.getElementById("nodeOperation");
   
-  NodeActionInput.addEventListener("input" , (event) => {
-  SetNodeDataFromDisplay(FocusNodeid)
+ // VideoInput.addEventListener("cha")
+
+function UpdateNodeClass(NodeId) {
+	Node = cy.$id(NodeId)
+	Node.removeClass(ActionType.Display);
+	Node.removeClass(ActionType.Functional);
+	Node.removeClass(ActionType.Input);
+	Node.removeClass(ActionType.Operator);
+	Node.addClass(GetNodeData(NodeId).Action)
+}
+
+
+  NodeActionInput.addEventListener("input" , updateSidebarAction); 
+  NameInputBox.addEventListener("input" ,() =>{SetNodeDataFromDisplay(FocusNodeid)}); 
   
-  let newValue = NodeActionInput.value;
+  function updateSidebarAction(){
+  SetNodeDataFromDisplay(FocusNodeid)
+
+
+
   InputDataBox.hidden	  =true;
   DisplayDataBox.hidden =true;
   FunctionDataBox.hidden=true;
   OperatorDataBox.hidden=true;
   
+  let newValue = NodeActionInput.value;
   switch (newValue) {
 	case ActionType.Functional:
 	  FunctionDataBox.hidden=false;
@@ -160,7 +224,7 @@ var cy = cytoscape({
 	  break;
   }
   
-  })
+  }
   
   // in the event no node is focused on,
   // this data should be displayed
@@ -184,17 +248,19 @@ var cy = cytoscape({
   this.Operation		= Operation;
   }
   }
-  var DefaultNodeData = new NodeScratchData("  ");
+  var DefaultNodeData = new NodeScratchData("");
   
 
   
   // would work to run ShowNodeData(GetNodeData) 
   function SetDisplayData(NodeData) {
+
 	NameInputBox.value = NodeData.Id
 	NodeActionInput.value = NodeData.Action
 	VideoInput.value = NodeData.VideoLink //define later
    NodeFunctionInput.value = NodeData.Function // add func params
   NodeOperationInput.value = NodeData.OperatorType
+ updateSidebarAction() 
   }
   
   function GetNodeData(NodeId) {
@@ -224,12 +290,17 @@ var cy = cytoscape({
   }
   
   function SetNodeDataFromDisplay(NodeId) {
-  if(cy.$id(NodeId).length != 0 ){
+ Node = cy.$id(NodeId);
+
+	if(cy.$id(NodeId).length != 0 ){
+
   let	NewData = GetDisplayData()
   
-	cy.$id(NodeId).scratch("NodeScratchData", NewData)
-	NameInputBox.value = NodeId
-	
+  
+  Node.scratch("NodeScratchData", NewData)
+  NameInputBox.value = NodeId
+  
+  UpdateNodeClass(NodeId)
   }}
   
   
@@ -246,7 +317,7 @@ var cy = cytoscape({
   }) 
   
   cy.$id( NodeData.Id).scratch("NodeScratchData",NodeData)
-  
+  cy.$id( NodeData.Id).addClass(NodeData.Action)
   }
   
   function CreateNodeFromDisplayData() {
