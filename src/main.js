@@ -328,6 +328,14 @@ function CreateNode(NodeData , position){ // add custom name, custom scratch
   cy.$id( NodeData.Id).addClass(NodeData.Action)
   SetDisplayData(DefaultNodeData)
   }
+
+  function DeleteFocusNode() {
+    if (FocusNodeid != "" && cy.$id(FocusNodeid).length !=0) {
+      cy.remove(cy.$id(FocusNodeid))
+      FocusNodeid  = ""
+      SetDisplayData("")
+    }
+  }
   
 function CreateNodeFromDisplayData() {
 	CreateNode(GetDisplayData());
