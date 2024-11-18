@@ -1,13 +1,66 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --sidebar-width: 20%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: cadetblue;
+  /* ... other styles ... */
 }
+.NodeHandleLable{
+  position: absolute;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bolder;
+  font-size: smaller;
+}
+
+video{
+
+  width:260px;
+  top:30px;
+  
+}
+
+.videoInput {
+  opacity: 0;
+  padding: 5px;
+  border: 1px solid #ccc;
+  font-size: x-small;
+  border-radius: 10px;
+}
+.body {
+  position: absolute;
+  top: 0.1%;
+  left: calc(var(--sidebar-width) + 0.1%);
+  width: calc(99.8% - var(--sidebar-width));
+  height: 99.7%;
+ 
+  /* ... other styles ... */
+}
+
+.sidebar h1 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.sidebar hr {
+  border-top: 1px solid #ccc;
+  margin: 10px 0;
+}
+
+.sidebar select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.sidebar img {
+  max-width: 100%;
+  height: auto;
+}
+
