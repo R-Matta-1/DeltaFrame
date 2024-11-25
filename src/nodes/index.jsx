@@ -46,7 +46,7 @@ function VideoInput() {
     return(<div style= {{ justifyContent:"center", width:"300px" ,height: "175px"}} className="react-flow__node-default">
        
         <video controls  src={VideoLink}></video>
-        <div onClick={(e) =>{RedirectClick(e)}}  style={{height:"20px",backgroundColor:'#bbd'}}>
+        <div onClick={(e) =>{RedirectClick(e)}}  style={{height:"20px",bottom:"-50px",backgroundColor:'#bbd'}}>
             <>Click To Input</>
             <input hidden onChange={(e)=>{InputAdition(e)}}  type="file" className="videoInput" accept="video/*"  />
         </div>
