@@ -52,7 +52,7 @@ setDraggedType(keys.keys)
      const onDrop = (event) => {
       event.preventDefault();
 
-      const newPosition = screenToFlowPosition({x:event.clientX, y:event.clientY })
+    const newPosition = screenToFlowPosition({x:event.clientX, y:event.clientY })
 
       const newNode = {
         id:origionalId(),
@@ -60,7 +60,10 @@ setDraggedType(keys.keys)
         position:newPosition
       }
 
-      const nodeAtSamePosition = getNodes().filter(node => node.position.x == newPosition.x && node.position.y == newPosition.y)
+	const nodeAtSamePosition = getNodes().filter(
+        node => node.position.x == newPosition.x && node.position.y == newPosition.y
+	)
+      
       if(nodeAtSamePosition.length == 0){ // solves double action problem
         setNodes((nds) => nds.concat(newNode));
       }
@@ -68,6 +71,12 @@ setDraggedType(keys.keys)
       
    
     };
+
+	const onNodeDragStop = (event, node, nodes) => {
+		console.log(event.view);
+	// delete the node if the courser is on the sidebar
+
+	}
    return (
    <>
          <Sidebar onNodeDrag = {onNodeDrag} /> 
@@ -83,6 +92,8 @@ setDraggedType(keys.keys)
     onDropCapture={(e)=>{onDrop(e)}}
     onDrop ={onDrop}
     onDragOver ={onDragOver}
+	autoPanOnNodeDrag = {false}
+	onNodeDragStop = {onNodeDragStop}
     fitView
 
    
