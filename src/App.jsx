@@ -9,12 +9,20 @@ let id = 0;
 const origionalId = () => `NodeId:${id++}`;
 
 function Sidebar(props){
+
     return(
 <div className="sidebar">
     <h1>Delta Frame</h1>
     <hr />
 {Object.entries(nodeTypes).map(([keys,])=>(
-  <div draggable key={keys.keys} onDragStart = {(e)=>{props.onNodeDrag(e,{keys})}} className= "DraggingDiv"> {keys} </div>
+	<div 
+		draggable 
+		key={keys.keys} 
+		onDragStart = {(e)=>{props.onNodeDrag(e,{keys})}} 
+		className= "DraggingDiv">
+
+			 {keys}
+	</div>
 ))}
     </div>
     )}
@@ -38,45 +46,45 @@ function Sidebar(props){
         (params) => setEdges((eds) => addEdge(params,eds))
      )
 
-     const onNodeDrag = (event,keys) =>{
-      
-console.log("drag: "+keys.keys)
-setDraggedType(keys.keys)
-     }
+    const onNodeDrag = (event,keys) =>{
+		console.log("drag: "+keys.keys)
+		setDraggedType(keys.keys)
+    }
 
-     const onDragOver = (event) =>{
+    const onDragOver = (event) =>{
     
       event.preventDefault();
-      console.log("Over")
-     }
-     const onDrop = (event) => {
-      event.preventDefault();
+      console.log(DraggedType)
+    }
 
+    const onDrop = (event) => {
+    event.preventDefault();
     const newPosition = screenToFlowPosition({x:event.clientX, y:event.clientY })
-
-      const newNode = {
+    const newNode = {
         id:origionalId(),
         type:DraggedType,
         position:newPosition
-      }
+    }
 
 	const nodeAtSamePosition = getNodes().filter(
         node => node.position.x == newPosition.x && node.position.y == newPosition.y
 	)
       
-      if(nodeAtSamePosition.length == 0){ // solves double action problem
+      if(nodeAtSamePosition.length == 0 && DraggedType in nodeTypes){ // solves double action problem
         setNodes((nds) => nds.concat(newNode));
       }
-      console.log(getNodes())
-      
-   
     };
 
 	const onNodeDragStop = (event, node, nodes) => {
-		console.log(event.view);
-	// delete the node if the courser is on the sidebar
+		const MouseOnSidebar = event.clientX / window.innerWidth < 0.2 ; 
+		console.log( event.clientX / window.innerWidth)
+		if(MouseOnSidebar){
+			setNodes(getNodes().filter(nds => nds.id != node.id))
 
+		}
+	
 	}
+
    return (
    <>
          <Sidebar onNodeDrag = {onNodeDrag} /> 
