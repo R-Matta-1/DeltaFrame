@@ -32,7 +32,7 @@ function Sidebar(props){
     const [nodes, setNodes] = useNodesState(InitalNodes);
     const [edges, setEdges] = useEdgesState([]);
     const [DraggedType, setDraggedType] =useState("");
-    const {screenToFlowPosition,getNodes } = useReactFlow()
+    const {screenToFlowPosition, getNodes, getEdges } = useReactFlow()
 
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -85,6 +85,10 @@ function Sidebar(props){
 	
 	}
 
+	const onEdgeClick =(event,edge) =>{
+			setEdges(getEdges().filter(edg => edg.id != edge.id))
+	}
+
    return (
    <>
          <Sidebar onNodeDrag = {onNodeDrag} /> 
@@ -102,10 +106,8 @@ function Sidebar(props){
     onDragOver ={onDragOver}
 	autoPanOnNodeDrag = {false}
 	onNodeDragStop = {onNodeDragStop}
-    fitView
-
-   
-    
+	onEdgeClick = {onEdgeClick}
+    fitView 
  > </ReactFlow>
         </div>
         </>
