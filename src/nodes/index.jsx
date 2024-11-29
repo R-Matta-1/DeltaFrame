@@ -19,19 +19,20 @@ function VideoDifference({x,y,Data}) {
    return( <div style= {{height: "50%"}} className="react-flow__node-default">
     <p>Difference</p>
 
-    <p className="NodeHandleLable" style={{left:"5%",top:"5%"}} >Video In</p>
-<Handle type="target" position= {Position.Left} style={{top:"25%"}} ></Handle>
-
     <p className="NodeHandleLable" style={{left:"5%",top:"50%", position:"absolute"}} >Video In</p>
-<Handle type="target" position= {Position.Left} style={{top:"75%"}} ></Handle>
+<Handle type="target" id="Input1" position= {Position.Left} style={{top:"75%"}} ></Handle>
+
+    <p className="NodeHandleLable" style={{left:"5%",top:"5%"}} >Video In</p>
+<Handle type="target" id="Input2" position= {Position.Left} style={{top:"25%"}} ></Handle>
+
 
     <p className="NodeHandleLable" style={{right:"5%",top:"25%", }} >Output</p>
-<Handle type="source"  position= {Position.Right} style={{top:"50%"}} ></Handle>
+<Handle type="source" id="Output" position= {Position.Right}  ></Handle>
 </div>)
 }
 
 function VideoInput() {
-    const [VideoLink,ChangeVideoLink] = useState('https://upload.wikimedia.org/wikipedia/commons/d/d9/177_day_spin_up_zonal_velocity.webm')
+    const [VideoLink,ChangeVideoLink] = useState('https://media.istockphoto.com/id/1413207061/video/road-traffic-in-delhi-roads.mp4?s=mp4-640x640-is&k=20&c=KnGos4ZVgHxZSV-zGAJk0mWsjR2kLGumoVcKI-PanEw=')
     
     function RedirectClick(e) {
         const HiddenInput = e.target.querySelector("input");
@@ -43,13 +44,29 @@ function VideoInput() {
         const InputVideoURL = URL.createObjectURL(e.target.files[0])
         ChangeVideoLink(InputVideoURL)
     }
-    return(<div style= {{ justifyContent:"center", width:"300px" ,height: "175px"}} className="react-flow__node-default">
+    return(
+    <div 
+        style= {{ justifyContent:"center", width:"300px" ,height: "175px"}} 
+        className="react-flow__node-default"
+    >
        
-        <video controls  src={VideoLink}></video>
-        <div onClick={(e) =>{RedirectClick(e)}}  style={{height:"20px",bottom:"-50px",backgroundColor:'#bbd'}}>
-            <>Click To Input</>
-            <input hidden onChange={(e)=>{InputAdition(e)}}  type="file" className="videoInput" accept="video/*"  />
-        </div>
+    <video
+        controls  src={VideoLink}>
+    </video>
+
+    <div 
+            onClick={(e) =>{RedirectClick(e)}}  
+            style={{height:"20px",bottom:"-50px",backgroundColor:'#bbd'}}
+    >
+            <p>Click To Input</p>
+    <input 
+        hidden 
+        onChange={(e)=>{InputAdition(e)}}  
+        type="file" 
+        className="videoInput" 
+        accept="video/*"  />
+        
+    </div>
     
     
     <Handle type="source" position= {Position.Right} style={{top:"50%"}} ></Handle>

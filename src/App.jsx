@@ -1,5 +1,14 @@
 import  './index.css';
-import { applyNodeChanges ,applyEdgeChanges, ReactFlow, useEdgesState, useNodesState, addEdge, useReactFlow, ReactFlowProvider, Position } from '@xyflow/react';
+import { applyNodeChanges
+	 ,applyEdgeChanges,
+	 Background, 
+	 ReactFlow, 
+	 useEdgesState, 
+	 useNodesState, 
+	 addEdge, 
+	 useReactFlow, 
+	 ReactFlowProvider, 
+	 Position } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
 import {InitalNodes, nodeTypes} from "./nodes/index.jsx";
@@ -108,7 +117,9 @@ function Sidebar(props){
 	onNodeDragStop = {onNodeDragStop}
 	onEdgeClick = {onEdgeClick}
     fitView 
- > </ReactFlow>
+ >
+	<Background/>
+	 </ReactFlow>
         </div>
         </>
         
