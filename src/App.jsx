@@ -48,9 +48,10 @@ function Sidebar(props){
         [],
       );
       const onEdgesChange = useCallback(
-        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+        (changes) => setEdges((eds) => {applyEdgeChanges(changes, eds)}),
         [],
       );
+	  
      const onConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params,eds))
      )
