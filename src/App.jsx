@@ -47,14 +47,23 @@ function Sidebar(props){
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
         [],
       );
-      const onEdgesChange = useCallback(
+
+    const onEdgesChange = useCallback(
         (changes) => setEdges((eds) => {applyEdgeChanges(changes, eds)}),
         [],
       );
 	  
      const onConnect = useCallback(
-        (params) => setEdges((eds) => addEdge(params,eds))
-     )
+        (newEdg) => {
+          const newEdges = edges.concat(newEdg);
+          const repeatedTargetEdges = newEdges.filter((eds)=>{return eds.targetHandle == newEdg.targetHandle && eds.target == newEdg.target})
+          console.log(repeatedTargetEdges.length)
+          if (repeatedTargetEdges.length > 1) {
+            console.log("more then edge targeting this HANDLE")            
+         } else {
+          setEdges((eds) => addEdge(newEdg,eds))
+         }
+        })
 
     const onNodeDrag = (event,keys) =>{
 		console.log("drag: "+keys.keys)

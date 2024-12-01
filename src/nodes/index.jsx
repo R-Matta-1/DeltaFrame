@@ -1,13 +1,13 @@
-import { Position, Handle } from "@xyflow/react";
-import {useState} from "react";
+import { Position, Handle, useHandleConnections } from "@xyflow/react";
+import {useCallback, useState} from "react";
 
 //TODO: custom fowarding,(involving the fowarding of videos for the workflow) 
-//TODO: custom Handle with lable, limits, 
+
 //TODO: find example of foward string 
 //TODO: simple video creation
 
 function VideoOutput({x,y,Data}) {
-    
+   
     return(
         <div style={{ justifyContent:"center", width:"360px" ,height: "175px"}}  className="react-flow__node-default">
            
@@ -18,9 +18,12 @@ function VideoOutput({x,y,Data}) {
        <p className="NodeHandleLable" style={{left:"5%",top:"25%" }} >Input</p>
        <Handle
             type="target" 
+            id="input"
+            onConnect = {(prop) => {console.log(prop)}}
             position= {Position.Left} 
+            connectionCount= {1}
             style={{top:"25%"}} 
-            ></Handle>
+            />
 </div>
     )
 }
