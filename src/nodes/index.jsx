@@ -1,47 +1,64 @@
 import { Position, Handle, useHandleConnections } from "@xyflow/react";
 import {useCallback, useState} from "react";
 
-//TODO: custom fowarding,(involving the fowarding of videos for the workflow) 
 
-//TODO: find example of foward string 
-//TODO: simple video creation
+
+function DivHandle(params) {
+    const divStyle = {
+        border:"solid black 1px" , 
+        zIndex:-1,
+        position:"absolute",
+        width:"10px",
+        height:"10px",
+        top:"-2.5px",
+        font: "8px Verdana"
+
+    }
+    if(params.position === Position.Left){
+        divStyle.left ="-15px"
+    } else {
+        divStyle.right="-15px"
+    }
+    if(params.type === "target"){
+        divStyle.backgroundColor ="#fcf"
+    } else {
+        divStyle.backgroundColor="#cfc"
+    }
+
+    return<>
+    <Handle style={{zIndex:"100000"}} {...params}>
+        <div style={divStyle} 
+                >
+                    {(params.type == "target")?"V":"O"}
+
+                </div>
+    </Handle>
+    </>}
 
 function VideoOutput({x,y,Data}) {
    
     return(
-        <div style={{ justifyContent:"center", width:"360px" ,height: "175px"}}  className="react-flow__node-default">
-           
-       <video controls src="https://upload.wikimedia.org/wikipedia/commons/d/d9/177_day_spin_up_zonal_velocity.webm" ></video>
-
+    <div style={{ justifyContent:"center", width:"360px" ,height: "175px"}}  className="react-flow__node-default">
        
-        
-       <p className="NodeHandleLable" style={{left:"5%",top:"25%" }} >Input</p>
-       <Handle
-            type="target" 
-            id="input"
-            onConnect = {(prop) => {console.log(prop)}}
-            position= {Position.Left} 
-            connectionCount= {1}
-            style={{top:"25%"}} 
-            />
+    <video controls src="https://upload.wikimedia.org/wikipedia/commons/d/d9/177_day_spin_up_zonal_velocity.webm" ></video>
+
+    <DivHandle type="target"  id="input" position= {Position.Left}  style={{top:"25%"}}  />
 </div>
     )
 }
 
 function VideoDifference({x,y,Data}) {
-   return( <div style= {{height: "50%"}} className="react-flow__node-default">
-    <p>Difference</p>
+   return( <>
+    <div style= {{height: "20%", padding:"0"}} className="react-flow__node-default">
+    <p style={{font:"15px Verdana"}}>Difference</p>
+   
+<DivHandle type="target" id="Input1" position= {Position.Left} style={{top:"75%"}}  />
 
-    <p className="NodeHandleLable" style={{left:"5%",top:"50%", position:"absolute"}} >Video In</p>
-<Handle type="target" id="Input1" position= {Position.Left} style={{top:"75%"}} ></Handle>
+<DivHandle type="target" id="Input2" position= {Position.Left} style={{top:"25%"}} />
 
-    <p className="NodeHandleLable" style={{left:"5%",top:"5%"}} >Video In</p>
-<Handle type="target" id="Input2" position= {Position.Left} style={{top:"25%"}} ></Handle>
+<DivHandle type="source" id="Output" position= {Position.Right}  />
 
-
-    <p className="NodeHandleLable" style={{right:"5%",top:"25%", }} >Output</p>
-<Handle type="source" id="Output" position= {Position.Right}  ></Handle>
-</div>)
+</div></>)
 }
 
 function VideoInput() {
@@ -82,7 +99,7 @@ function VideoInput() {
     </div>
     
     
-    <Handle type="source" position= {Position.Right} style={{top:"50%"}} ></Handle>
+    <DivHandle type="source" position= {Position.Right} style={{top:"50%"}} />
     </div>)
 }
 
