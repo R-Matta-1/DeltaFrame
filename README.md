@@ -7,4 +7,5 @@ todo:
 - defualt videos
 - implementation of ffmpeg starts with understanding compelex filtergraphs and how they are generated
 - prevent a node from linking to it'self
+- prevent edge from connecting to node of different type (ie. audio to video)
 

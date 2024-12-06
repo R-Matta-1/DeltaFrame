@@ -30,7 +30,10 @@ function Sidebar(props){
 		onDragStart = {(e)=>{props.onNodeDrag(e,{keys})}} 
 		className= "DraggingDiv">
 
-			 {keys}
+<h4 className='NodeName'>{keys}</h4>
+
+<hr ></hr>
+
 	</div>
 ))}
     </div>

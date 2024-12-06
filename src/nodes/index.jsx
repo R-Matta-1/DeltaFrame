@@ -1,7 +1,10 @@
 import { Position, Handle, useHandleConnections } from "@xyflow/react";
 import {useCallback, useState} from "react";
 
-
+const MediaTypes = {
+    VIDEO:"video",
+    AUDIO:"audio"
+}
 
 function DivHandle(params) {
     const divStyle = {
@@ -29,7 +32,8 @@ function DivHandle(params) {
     <Handle style={{zIndex:"100000"}} {...params}>
         <div style={divStyle} 
                 >
-                    {(params.type == "target")?"V":"O"}
+                    {(params.mediaType == MediaTypes.VIDEO)?"V":null}
+                    {(params.mediaType == MediaTypes.AUDIO)?"A":null}
 
                 </div>
     </Handle>
@@ -42,7 +46,7 @@ function VideoOutput({x,y,Data}) {
        
     <video controls src="https://upload.wikimedia.org/wikipedia/commons/d/d9/177_day_spin_up_zonal_velocity.webm" ></video>
 
-    <DivHandle type="target"  id="input" position= {Position.Left}  style={{top:"25%"}}  />
+    <DivHandle type="target" mediaType = {MediaTypes.VIDEO}   id="input" position= {Position.Left}  style={{top:"25%"}}  />
 </div>
     )
 }
@@ -52,11 +56,11 @@ function VideoDifference({x,y,Data}) {
     <div style= {{height: "20%", padding:"0"}} className="react-flow__node-default">
     <p style={{font:"15px Verdana"}}>Difference</p>
    
-<DivHandle type="target" id="Input1" position= {Position.Left} style={{top:"75%"}}  />
+<DivHandle type="target" id="Input1" position= {Position.Left} mediaType = {MediaTypes.VIDEO} style={{top:"75%"}}  />
 
-<DivHandle type="target" id="Input2" position= {Position.Left} style={{top:"25%"}} />
+<DivHandle type="target" id="Input2" position= {Position.Left} mediaType = {MediaTypes.VIDEO} style={{top:"25%"}} />
 
-<DivHandle type="source" id="Output" position= {Position.Right}  />
+<DivHandle type="source" id="Output" position= {Position.Right} mediaType = {MediaTypes.VIDEO}   />
 
 </div></>)
 }
@@ -99,21 +103,23 @@ function VideoInput() {
     </div>
     
     
-    <DivHandle type="source" position= {Position.Right} style={{top:"50%"}} />
+    <DivHandle type="source" id={"VideoOutput"} position= {Position.Right} style={{top:"33%"}} mediaType = {MediaTypes.VIDEO} />
+    <DivHandle type="source" id={"audioOutput"} position= {Position.Right} style={{top:"66%"}} mediaType = {MediaTypes.AUDIO}  />
     </div>)
 }
 
 
 
 export const nodeTypes  = {
-    "VideoOutput":VideoOutput,
-    "VideoDifference":VideoDifference,
-    "VideoInput":VideoInput
+    "Output":VideoOutput,
+    "Difference":VideoDifference,
+    "Input":VideoInput
 }
 
+/// THis should be the ONLY place where the names are hardcoded
 export const  InitalNodes = [
-    { id: "a", type: "VideoInput", position: { x: 10, y: 50 }, data: { }},
-    { id: "d", type: "VideoInput", position: { x: 10, y: 270 }, data: { }},
-    { id: "b", type: "VideoDifference", position: { x: 365, y: 150 }, data: { }},
-    { id: "c", type: "VideoOutput", position: { x: 370, y: 390 }, data: { }},
+    { id: "a", type: "Input", position: { x: 10, y: 50 }, data: { }},
+    { id: "d", type: "Input", position: { x: 10, y: 270 }, data: { }},
+    { id: "b", type: "Difference", position: { x: 365, y: 150 }, data: { }},
+    { id: "c", type: "Output", position: { x: 370, y: 390 }, data: { }},
 ]
