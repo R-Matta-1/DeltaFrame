@@ -14,7 +14,7 @@ function DivHandle(params) {
         width:"10px",
         height:"10px",
         top:"-2.5px",
-        font: "8px Verdana"
+        font: "8px  Verdana black"
 
     }
     if(params.position === Position.Left){
@@ -46,7 +46,8 @@ function VideoOutput({x,y,Data}) {
        
     <video controls src="https://upload.wikimedia.org/wikipedia/commons/d/d9/177_day_spin_up_zonal_velocity.webm" ></video>
 
-    <DivHandle type="target" mediaType = {MediaTypes.VIDEO}   id="input" position= {Position.Left}  style={{top:"25%"}}  />
+    <DivHandle type="target" mediaType = {MediaTypes.VIDEO} id="input" position= {Position.Left}  style={{top:"33%"}}  />
+    <DivHandle type="target" mediaType = {MediaTypes.AUDIO} id="input" position= {Position.Left}  style={{top:"66%"}}  />
 </div>
     )
 }
