@@ -46,11 +46,26 @@ function DivHandle(unalteredParams) {
 }
 
 function VideoOutput({ x, y, Data }) {
+  const [FFMPEGCommand, setFFMPEGCommand] = useState(" ");
+  const buttonClick = () => {
+    setFFMPEGCommand("TODO: this part may take alot of work..");
+  };
   return (
     <div
-      style={{ justifyContent: "center", width: "360px", height: "175px" }}
+      style={{ justifyContent: "center", width: "360px" }}
       className="react-flow__node-default"
     >
+      <button onClick={buttonClick}>gernerate command</button>
+      <div
+        style={{
+          backgroundColor: "#ccc",
+          fontFamily: "monospace",
+          fontSize: "smaller",
+          margin: "5px",
+        }}
+      >
+        {FFMPEGCommand}
+      </div>
       <video
         controls
         src="https://upload.wikimedia.org/wikipedia/commons/d/d9/177_day_spin_up_zonal_velocity.webm"
