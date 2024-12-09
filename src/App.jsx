@@ -13,7 +13,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
-import { InitalNodes, nodeTypes } from "./nodes/index.jsx";
+import { InitalNodes, nodeTypes, MediaTypes } from "./nodes/index.jsx";
 import { useState, useCallback } from "react";
 
 let id = 0;
@@ -76,10 +76,18 @@ function App() {
       return;
     }
 
-    newEdges.forEach((edge) => {
-      console.log(edge);
-    });
-    console.log(newEdges.length);
+    for (let i = 0; i < newEdges.length; i++) {
+      let edge = newEdges[i];
+      let edgeSourceMedia = edge.sourceHandle.substring(0, 4);
+      let edgeTargetMedia = edge.targetHandle.substring(0, 4);
+
+      if (edgeTargetMedia != edgeSourceMedia) {
+        return;
+      }
+      if (edge.source == edge.target) {
+        return;
+      }
+    }
 
     setEdges((eds) => addEdge(newEdge, eds));
   });

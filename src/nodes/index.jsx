@@ -1,14 +1,16 @@
 import { Position, Handle, useHandleConnections } from "@xyflow/react";
 import { useCallback, useState } from "react";
 
-const MediaTypes = {
+export const MediaTypes = {
   VIDEO: "video",
   AUDIO: "audio",
 };
 
-function DivHandle(props) {
-  const params = { ...props };
+function DivHandle(unalteredParams) {
+  const params = { ...unalteredParams };
+
   params.id = params.mediaType + params.type + params.id;
+
   const divStyle = {
     border: "solid black 1px",
     zIndex: -1,
@@ -18,11 +20,13 @@ function DivHandle(props) {
     top: "-2.5px",
     font: "8px  Verdana black",
   };
+
   if (params.position === Position.Left) {
     divStyle.left = "-15px";
   } else {
     divStyle.right = "-15px";
   }
+
   if (params.type === "target") {
     divStyle.backgroundColor = "#fcf";
   } else {
