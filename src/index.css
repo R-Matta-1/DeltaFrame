@@ -1,7 +1,9 @@
 :root {
   --sidebar-width: 20%;
 }
-
+body {
+  background-color: #d6daf3;
+}
 .sidebar {
   position: fixed;
   top: 0;
@@ -11,29 +13,33 @@
   background-color: cadetblue;
   /* ... other styles ... */
 }
-.NodeHandleLable{
+
+.NodeHolder {
+  overflow-x: scroll;
+  max-height: 80%;
+}
+
+.NodeHandleLable {
   position: absolute;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-weight: bolder;
   font-size: smaller;
 }
 
-video{
-
-  width:260px;
-  top:30px;
-  
+video {
+  width: 260px;
+  top: 30px;
 }
-.DraggingDiv{
-  border: 1px solid #000 ;
+.DraggingDiv {
+  border: 1px solid #000;
   padding: 2px;
   margin: 2px;
   background-color: whitesmoke;
   justify-content: center;
 }
-.NodeName{
+.NodeName {
   font-weight: 450;
-  font-family:monospace;
+  font-family: monospace;
   margin-top: 10px;
   margin-bottom: 0;
 }
@@ -51,7 +57,7 @@ video{
   left: calc(var(--sidebar-width) + 0.1%);
   width: calc(99.8% - var(--sidebar-width));
   height: 99.7%;
- 
+
   /* ... other styles ... */
 }
 
@@ -77,4 +83,3 @@ video{
   max-width: 100%;
   height: auto;
 }
-

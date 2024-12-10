@@ -24,20 +24,22 @@ function Sidebar(props) {
     <div className="sidebar">
       <h1>Delta Frame</h1>
       <hr />
-      {Object.entries(nodeTypes).map(([keys]) => (
-        <div
-          draggable
-          key={keys.keys}
-          onDragStart={(e) => {
-            props.onNodeDrag(e, { keys });
-          }}
-          className="DraggingDiv"
-        >
-          <h4 className="NodeName">{keys}</h4>
+      <div className="NodeHolder">
+        {Object.entries(nodeTypes).map(([keys]) => (
+          <div
+            draggable
+            key={keys.keys}
+            onDragStart={(e) => {
+              props.onNodeDrag(e, { keys });
+            }}
+            className="DraggingDiv"
+          >
+            <h4 className="NodeName">{keys}</h4>
 
-          <hr></hr>
-        </div>
-      ))}
+            <hr></hr>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
