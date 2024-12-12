@@ -1,9 +1,4 @@
-import {
-  Position,
-  Handle,
-  useReactFlow,
-  useHandleConnections,
-} from "@xyflow/react";
+import { Position, Handle } from "@xyflow/react";
 
 export function DivHandle(unalteredParams) {
   const params = { ...unalteredParams };

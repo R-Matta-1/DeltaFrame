@@ -1,9 +1,4 @@
-import {
-  Position,
-  Handle,
-  useReactFlow,
-  useHandleConnections,
-} from "@xyflow/react";
+import { Position, useReactFlow } from "@xyflow/react";
 import { useCallback, useRef, useState } from "react";
 import { DivHandle, MediaTypes } from "./DivHandle";
 
@@ -12,10 +7,16 @@ function VideoOutput({ x, y, Data }) {
   const { getNodes } = useReactFlow();
 
   const buttonClick = () => {
-    const command = "ffmpeg -y ";
-    const inputNodes = getNodes().filter((node) => node.type == "Input");
+    // the only exmaple of a mutable var in code
+    let command = "ffmpeg -y ";
+    const inputNodes = getNodes().filter(
+      (node) => node.data.fileURL != undefined
+    );
+
     inputNodes.forEach((node) => {
-      console.log(node.data);
+      // ffmpeg . read, allowing files to be accessed and renamed
+      //todo implement ffmpeg and advance on filtercompex
+      command = command + ` i- ${node.id}.mp4 `;
     });
     setFFMPEGCommand(command);
   };
@@ -94,7 +95,8 @@ function VideoDifference({ x, y, Data }) {
   );
 }
 
-function VideoInput() {
+function VideoInput({ id, Data }) {
+  const { updateNodeData } = useReactFlow();
   const [VideoLink, ChangeVideoLink] = useState("");
   const width = 300;
   const height = 150;
@@ -109,9 +111,11 @@ function VideoInput() {
       HiddenInput.click();
     }
   }
+
   function InputAdition(e) {
     const InputVideoURL = URL.createObjectURL(e.target.files[0]);
     ChangeVideoLink(InputVideoURL);
+    updateNodeData(id, { fileURL: InputVideoURL });
   }
   return (
     <div
