@@ -48,7 +48,7 @@ function App() {
   const [nodes, setNodes] = useNodesState(InitalNodes);
   const [edges, setEdges] = useEdgesState([]);
   const [DraggedType, setDraggedType] = useState("");
-  const { screenToFlowPosition, getNodes, getEdges, ha } = useReactFlow();
+  const { screenToFlowPosition, getNodes, getEdges } = useReactFlow();
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
