@@ -27,7 +27,7 @@ body {
 }
 
 video {
-  width: 260px;
+  max-width: 260px;
   top: 30px;
 }
 .DraggingDiv {

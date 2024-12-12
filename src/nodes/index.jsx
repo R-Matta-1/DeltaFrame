@@ -1,5 +1,5 @@
 import { Position, Handle, useHandleConnections } from "@xyflow/react";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export const MediaTypes = {
   VIDEO: "video",
@@ -126,13 +126,17 @@ function VideoDifference({ x, y, Data }) {
 }
 
 function VideoInput() {
-  const [VideoLink, ChangeVideoLink] = useState(
-    "https://media.istockphoto.com/id/1413207061/video/road-traffic-in-delhi-roads.mp4?s=mp4-640x640-is&k=20&c=KnGos4ZVgHxZSV-zGAJk0mWsjR2kLGumoVcKI-PanEw="
-  );
+  const [VideoLink, ChangeVideoLink] = useState("");
+  const width = 300;
+  const height = 150;
+  const inputRef = useRef(null);
 
-  function RedirectClick(e) {
-    const HiddenInput = e.target.querySelector("input");
-    if (HiddenInput) {
+  function RedirectClick(event) {
+    const HiddenInput = inputRef.current;
+    console.log(HiddenInput);
+    if (inputRef.current) {
+      console.log("click happen");
+
       HiddenInput.click();
     }
   }
@@ -142,28 +146,40 @@ function VideoInput() {
   }
   return (
     <div
-      style={{ justifyContent: "center", width: "300px", height: "175px" }}
+      style={{
+        justifyContent: "center",
+        width: `${width}px`,
+        height: `${height}px`,
+      }}
       className="react-flow__node-default"
     >
-      <video controls src={VideoLink}></video>
+      {VideoLink && (
+        <video controls height={height - 30} src={VideoLink}></video>
+      )}
 
-      <div
-        onClick={(e) => {
-          RedirectClick(e);
+      <button
+        onClick={RedirectClick}
+        style={{
+          position: "absolute",
+          width: `100px`,
+          height: `27px`,
+          backgroundColor: "#bbd",
+          justifyContent: "center",
+          bottom: "3px",
+          left: `${width / 2 - 100 / 2}px`,
         }}
-        style={{ height: "20px", bottom: "-50px", backgroundColor: "#bbd" }}
       >
-        <p>Click To Input</p>
-        <input
-          hidden
-          onChange={(e) => {
-            InputAdition(e);
-          }}
-          type="file"
-          className="videoInput"
-          accept="video/*"
-        />
-      </div>
+        Click To Input
+      </button>
+      <input
+        hidden
+        onChange={InputAdition}
+        style={{ position: "absolute" }}
+        ref={inputRef}
+        type="file"
+        className="videoInput"
+        accept="video/*"
+      />
 
       <DivHandle
         type="source"
@@ -172,6 +188,7 @@ function VideoInput() {
         style={{ top: "33%" }}
         mediaType={MediaTypes.VIDEO}
       />
+
       <DivHandle
         type="source"
         id="2"
