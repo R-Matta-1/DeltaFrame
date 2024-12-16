@@ -1,9 +1,12 @@
 import { Position, Handle } from "@xyflow/react";
 
+export function getDivHandleId(mediaType, type, id) {
+  return mediaType + type + id;
+}
 export function DivHandle(unalteredParams) {
   const params = { ...unalteredParams };
 
-  params.id = params.mediaType + params.type + params.id;
+  params.id = getDivHandleId(params.mediaType, params.type, params.id);
 
   const divStyle = {
     border: "solid black 1px",

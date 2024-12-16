@@ -1,23 +1,50 @@
-import { Position, useReactFlow } from "@xyflow/react";
+import {
+  getEdgeCenter,
+  getIncomers,
+  Position,
+  useReactFlow,
+} from "@xyflow/react";
 import { useCallback, useRef, useState } from "react";
-import { DivHandle, MediaTypes } from "./DivHandle";
 
-function VideoOutput({ x, y, Data }) {
+import { DivHandle, getDivHandleId, MediaTypes } from "./DivHandle";
+
+function VideoOutput({ id, x, y, Data }) {
   const [FFMPEGCommand, setFFMPEGCommand] = useState(" ");
-  const { getNodes } = useReactFlow();
+  const { getNodes, getEdges, getNode, getHandleConnections } = useReactFlow();
 
   const buttonClick = () => {
-    // the only exmaple of a mutable var in code
-    let command = "ffmpeg -y ";
-    const inputNodes = getNodes().filter(
-      (node) => node.data.fileURL != undefined
-    );
-
-    inputNodes.forEach((node) => {
-      // ffmpeg . read, allowing files to be accessed and renamed
-      //todo implement ffmpeg and advance on filtercompex
-      command = command + ` i- ${node.id}.mp4 `;
+    const thisNode = getNode(id);
+    const thisVideoInput = getHandleConnections({
+      type: "target",
+      nodeId: id,
+      id: "videotarget1",
     });
+    const thisAudioInput = getHandleConnections({
+      type: "target",
+      nodeId: id,
+      id: "audiotarget2",
+    });
+
+    let filter = '-filter_complex "';
+    let input = "";
+    let mapping = "";
+    let Requirements = getIncomers(thisNode, getNodes(), getEdges());
+
+    while (Requirements.length != 0) {
+      const node = Requirements.shift();
+      Requirements.push(...getIncomers(node, getNodes(), getEdges()));
+
+      if (node.data.fileURL != undefined) {
+        input = input + ` i- \"${node.data.fileURL}\" `;
+      }
+      // resolve the handle
+      console.log(node);
+    }
+    //TODO: Resolve all other edges that would be a part of filter
+
+    filter = filter + '"';
+
+    const command = "ffmpeg " + input + filter + mapping;
     setFFMPEGCommand(command);
   };
   return (
@@ -113,10 +140,15 @@ function VideoInput({ id, Data }) {
   }
 
   function InputAdition(e) {
-    const InputVideoURL = URL.createObjectURL(e.target.files[0]);
+    const file = e.target.files[0];
+    const InputVideoURL = URL.createObjectURL(file);
     ChangeVideoLink(InputVideoURL);
-    updateNodeData(id, { fileURL: InputVideoURL });
+    updateNodeData(id, {
+      fileURL: file.name,
+      fileBlobUrl: InputVideoURL,
+    });
   }
+
   return (
     <div
       style={{
