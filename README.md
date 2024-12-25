@@ -1,11 +1,11 @@
 ![data of the plan](Plan.jpg)
 
 todo: 
-- read more ffmpeg
-    - the goal is such that the output node can produce complex filtergraph 
-     - to keep the system modular it would make sence for each node to produce filter based on what came before it, learn how these work
-- defualt videos
-- implementation of ffmpeg starts with understanding compelex filtergraphs and how they are generated
-- prevent a node from linking to it'self
-- prevent edge from connecting to node of different type (ie. audio to video)
-
+- write documentation on creating a node
+- create more nodes
+- style everything
+- copy to clipboard button
+- impliment sample clips with ffmpeg.wasm
+- input -ss time selection
+- impliment xy coordinate selector using video data
+- troubleshoot any problems with ffmpef code generator
