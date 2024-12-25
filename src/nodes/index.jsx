@@ -1,92 +1,14 @@
-import {
-  getEdgeCenter,
-  getIncomers,
-  Position,
-  useReactFlow,
-} from "@xyflow/react";
-import { useCallback, useRef, useState } from "react";
+import { getEdgeCenter, Position, useReactFlow } from "@xyflow/react";
+import { useCallback, useRef, useState, useEffect } from "react";
 
 import { DivHandle, getDivHandleId, MediaTypes } from "./DivHandle";
+import VideoOutput from "./VideoOutput";
 
-function VideoOutput({ id, x, y, Data }) {
-  const [FFMPEGCommand, setFFMPEGCommand] = useState(" ");
-  const { getNodes, getEdges, getNode, getHandleConnections } = useReactFlow();
-
-  const buttonClick = () => {
-    const thisNode = getNode(id);
-    const thisVideoInput = getHandleConnections({
-      type: "target",
-      nodeId: id,
-      id: "videotarget1",
-    });
-    const thisAudioInput = getHandleConnections({
-      type: "target",
-      nodeId: id,
-      id: "audiotarget2",
-    });
-
-    let filter = '-filter_complex "';
-    let input = "";
-    let mapping = "";
-    let Requirements = getIncomers(thisNode, getNodes(), getEdges());
-
-    while (Requirements.length != 0) {
-      const node = Requirements.shift();
-      Requirements.push(...getIncomers(node, getNodes(), getEdges()));
-
-      if (node.data.fileURL != undefined) {
-        input = input + ` i- \"${node.data.fileURL}\" `;
-      }
-      // resolve the handle
-      console.log(node);
-    }
-    //TODO: Resolve all other edges that would be a part of filter
-
-    filter = filter + '"';
-
-    const command = "ffmpeg " + input + filter + mapping;
-    setFFMPEGCommand(command);
-  };
-  return (
-    <div
-      style={{ justifyContent: "center", width: "360px" }}
-      className="react-flow__node-default"
-    >
-      <button onClick={buttonClick}>gernerate command</button>
-      <div
-        style={{
-          backgroundColor: "#ccc",
-          fontFamily: "monospace",
-          fontSize: "smaller",
-          margin: "5px",
-        }}
-      >
-        {FFMPEGCommand}
-      </div>
-      <video
-        controls
-        src="https://upload.wikimedia.org/wikipedia/commons/d/d9/177_day_spin_up_zonal_velocity.webm"
-      ></video>
-
-      <DivHandle
-        type="target"
-        id="1"
-        mediaType={MediaTypes.VIDEO}
-        position={Position.Left}
-        style={{ top: "33%" }}
-      />
-      <DivHandle
-        type="target"
-        id="2"
-        mediaType={MediaTypes.AUDIO}
-        position={Position.Left}
-        style={{ top: "66%" }}
-      />
-    </div>
-  );
-}
-
-function VideoDifference({ x, y, Data }) {
+function VideoDifference({ x, y, id, Data }) {
+  const { updateNodeData } = useReactFlow();
+  useEffect(() => {
+    updateNodeData(id, { FFmFilterNode: "blend=difference" });
+  }, []);
   return (
     <>
       <div

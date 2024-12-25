@@ -17,7 +17,7 @@ import { InitalNodes, nodeTypes, MediaTypes } from "./nodes/index.jsx";
 import { useState, useCallback } from "react";
 
 let id = 0;
-const origionalId = () => `NodeId:${id++}`;
+const origionalId = () => `Item${id++}`;
 
 function Sidebar(props) {
   return (
@@ -132,6 +132,11 @@ function App() {
     console.log(event.clientX / window.innerWidth);
     if (MouseOnSidebar) {
       setNodes(getNodes().filter((nds) => nds.id != node.id));
+      setEdges(
+        getEdges().filter(
+          (edg) => edg.source != node.id && edg.target != node.id
+        )
+      );
     }
   };
 
