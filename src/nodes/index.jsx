@@ -4,7 +4,7 @@ import { useCallback, useRef, useState, useEffect } from "react";
 import { DivHandle, getDivHandleId, MediaTypes } from "./DivHandle";
 import VideoOutput from "./VideoOutput";
 
-function VideoDifference({ x, y, id, Data }) {
+function VideoDifference({ id, Data }) {
   const { updateNodeData } = useReactFlow();
   useEffect(() => {
     updateNodeData(id, { FFmFilterNode: "blend=difference" });
@@ -24,7 +24,6 @@ function VideoDifference({ x, y, id, Data }) {
           mediaType={MediaTypes.VIDEO}
           style={{ top: "75%" }}
         />
-
         <DivHandle
           type="target"
           id="2"

@@ -81,6 +81,10 @@ export default function VideoOutput({ id, x, y, Data }) {
     setFFMfilter(filter);
     setFFMmap(mapping);
   };
+
+  const CopyCommandToClipboard = () => {
+    navigator.clipboard.writeText(`ffmpeg ${FFMinput} ${FFMfilter} ${FFMmap}`);
+  };
   return (
     <div
       style={{ justifyContent: "center", width: "260px" }}
@@ -104,6 +108,8 @@ export default function VideoOutput({ id, x, y, Data }) {
         <span style={{ color: "#C9F90F" }}>{FFMmap}</span>
         <br />
       </div>
+
+      <button onClick={CopyCommandToClipboard}>copyToClipboard</button>
 
       <DivHandle
         type="target"
