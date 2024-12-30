@@ -56,10 +56,11 @@ function VideoDifference({ id, Data }) {
 
 todo:
 
-- [ ] create more nodes
+- [x] impliment sample clips with ffmpeg.wasm
+- [ ] ffmpeg code generator WITH audio and more complex output support
 - [ ] style everything
-- [ ] impliment sample clips with ffmpeg.wasm
 - [ ] more settings for input node (-ss and file name edit)
-- [ ] impliment xy coordinate selector using video data
-- [ ] troubleshoot any problems with ffmpeg code generator
+- [ ] settings for output
+  - output ctf output time
+- [ ] create more nodes
 - [ ] place on github pages

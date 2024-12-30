@@ -45,7 +45,7 @@ function VideoDifference({ id, Data }) {
 
 function VideoInput({ id, Data }) {
   const { updateNodeData } = useReactFlow();
-  const [VideoLink, ChangeVideoLink] = useState("");
+  const [VideoLink, setVideoLink] = useState("");
   const width = 300;
   const height = 150;
   const inputRef = useRef(null);
@@ -63,10 +63,12 @@ function VideoInput({ id, Data }) {
   function InputAdition(e) {
     const file = e.target.files[0];
     const InputVideoURL = URL.createObjectURL(file);
-    ChangeVideoLink(InputVideoURL);
+    setVideoLink(InputVideoURL);
+    console.log(file);
     updateNodeData(id, {
       fileURL: file.name,
       fileBlobUrl: InputVideoURL,
+      file: file,
     });
   }
 
