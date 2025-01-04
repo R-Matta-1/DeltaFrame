@@ -60,3 +60,4 @@ todo:
 - stylize and color
 - input and output setting
 - better error output (a little box would be cool)
+- find a way of making certian node not apear simmilar to a penis
