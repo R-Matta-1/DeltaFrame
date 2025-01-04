@@ -3,6 +3,7 @@ import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import { useState, useRef } from "react";
 import { DivHandle, MediaTypes } from "./DivHandle";
+import CopyIcon from "../copy-svgrepo-com (1).jsx";
 
 function TokenizeString(string) {
   let tokenizedString = [];
@@ -31,9 +32,9 @@ export default function VideoOutput({ id, x, y, Data }) {
   const { getNodes, getEdges, getNode, getHandleConnections } = useReactFlow();
 
   const [FFMinput, setFFMinput] = useState(" ");
-  const [FFMinputFiles, setFFMinputFiles] = useState([]);
   const [FFMfilter, setFFMfilter] = useState(" ");
   const [FFMmap, setFFMmap] = useState(" ");
+  const [TextCoppied, setTextCoppied] = useState(false);
 
   const [source, setSource] = useState("");
   const [loaded, setLoaded] = useState(false);
@@ -69,7 +70,7 @@ export default function VideoOutput({ id, x, y, Data }) {
   const generateCommand = () => {
     console.log(getEdges());
     // Generate the ffmpeg command
-    setFFMinputFiles([]);
+    let FFMinputFiles = [];
     const thisNode = getNode(id);
     let filter = "";
     let input = "";
@@ -84,9 +85,10 @@ export default function VideoOutput({ id, x, y, Data }) {
 
       if (node?.data?.fileURL) {
         input = input + ` -i \"${node.data.fileURL}\" `;
-        setFFMinputFiles((FFMinputFiles) => [...FFMinputFiles, node.data.file]);
+        FFMinputFiles.push(node.data.file);
         continue;
       }
+
       if (node?.data?.FFmFilterNode) {
         let FFmFilterNode = node.data.FFmFilterNode;
         // now we have FFmFilterNode we can add it's input and output edges
@@ -137,30 +139,38 @@ export default function VideoOutput({ id, x, y, Data }) {
       mapping = "outfile.mp4";
     }
 
-    setFFMinput(input);
-
-    setFFMfilter(filter);
-    setFFMmap(mapping);
+    return [FFMinputFiles, input, filter, mapping];
   };
 
   const CopyCommandToClipboard = () => {
     navigator.clipboard.writeText(`ffmpeg ${FFMinput} ${FFMfilter} ${FFMmap}`);
+    setTextCoppied(true);
   };
-  const GenerateVideo = async () => {
-    generateCommand();
 
-    console.log("generating video");
+  const LoadCommand = () => {
+    const [, FFMinput, FFMfilter, FFMmap] = generateCommand();
+    setFFMinput(FFMinput);
+    setFFMfilter(FFMfilter);
+    setFFMmap(FFMmap);
+    setTextCoppied(false);
+  };
+
+  const GenerateVideo = async () => {
+    const [FFMinputFiles, input, filter, mapping] = generateCommand();
+    LoadCommand();
+
     const ffmpeg = ffmpegRef.current;
+    console.log("generating video");
 
     for (let i = 0; i < FFMinputFiles.length; i++) {
       const file = FFMinputFiles[i];
       const videoFile = await fetchFile(file);
       await ffmpeg.writeFile(file.name, videoFile);
-      console.log("wrote file: ");
+      console.log(`wrote file: ${file.name}`);
       console.log(file);
     }
     const TokenizedCommand = TokenizeString(
-      "-y" + FFMinput + " " + FFMfilter + " -t 3 " + FFMmap
+      "-y" + input + " " + filter + " -t 3 " + mapping
     );
     console.log(TokenizedCommand);
     await ffmpeg.exec(TokenizedCommand);
@@ -174,18 +184,42 @@ export default function VideoOutput({ id, x, y, Data }) {
 
   return (
     <div
-      style={{ justifyContent: "center", width: "260px" }}
+      style={{
+        justifyContent: "center",
+        width: "260px",
+        fontFamily: "monospace",
+      }}
       className="react-flow__node-default"
     >
-      <button onClick={generateCommand}>gernerate command</button>
+      <button onClick={LoadCommand}>gernerate command</button>
       <div
         style={{
           backgroundColor: "#000",
           fontFamily: "monospace",
           fontSize: "smaller",
           margin: "5px",
+          position: "relative",
         }}
       >
+        <button
+          onClick={CopyCommandToClipboard}
+          style={{
+            position: "absolute",
+            height: "40px",
+            width: "40px",
+            top: "0px",
+            left: "0px",
+            backgroundColor: "#abc1",
+            border: 0,
+          }}
+        >
+          <CopyIcon
+            fill={TextCoppied ? "#000" : "#FFF"}
+            viewBox={"0 0 24 24"}
+            width="30px"
+          />
+        </button>
+        <br />
         <span style={{ color: "#FFFFFF" }}>ffmpeg </span>
         <br />
         <span style={{ color: "#FDFDCB" }}>{FFMinput}</span>
@@ -196,7 +230,6 @@ export default function VideoOutput({ id, x, y, Data }) {
         <br />
       </div>
 
-      <button onClick={CopyCommandToClipboard}>copyToClipboard</button>
       <br />
       {loaded ? (
         <button onClick={GenerateVideo}>now generate thing</button>

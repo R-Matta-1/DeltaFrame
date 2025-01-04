@@ -5,38 +5,27 @@ export function getDivHandleId(mediaType, type, id) {
 }
 export function DivHandle(unalteredParams) {
   const params = { ...unalteredParams };
-
+  const StyleColor = params.type === "target" ? "white" : "white";
   params.id = getDivHandleId(params.mediaType, params.type, params.id);
 
-  const divStyle = {
+  const style = {
     border: "solid black 1px",
     zIndex: -1,
     position: "absolute",
-    width: "10px",
-    height: "10px",
-    top: "-2.5px",
+    borderRadius: "20%",
+    width: "20px",
+    height: "20px",
     font: "8px  Verdana black",
+    backgroundColor: StyleColor,
+    zIndex: 100,
+    ...params.style,
   };
-
-  if (params.position === Position.Left) {
-    divStyle.left = "-15px";
-  } else {
-    divStyle.right = "-15px";
-  }
-
-  if (params.type === "target") {
-    divStyle.backgroundColor = "#fcf";
-  } else {
-    divStyle.backgroundColor = "#cfc";
-  }
 
   return (
     <>
-      <Handle style={{ zIndex: "100" }} {...params}>
-        <div style={divStyle}>
-          {params.mediaType == MediaTypes.VIDEO ? "V" : null}
-          {params.mediaType == MediaTypes.AUDIO ? "A" : null}
-        </div>
+      <Handle {...params} style={style}>
+        {params.mediaType == MediaTypes.VIDEO ? "V" : null}
+        {params.mediaType == MediaTypes.AUDIO ? "A" : null}
       </Handle>
     </>
   );
