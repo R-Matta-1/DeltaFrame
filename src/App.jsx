@@ -9,6 +9,7 @@ import {
   addEdge,
   useReactFlow,
   ReactFlowProvider,
+  getOutgoers,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
@@ -16,7 +17,7 @@ import { InitalNodes, nodeTypes, MediaTypes } from "./nodes/index.jsx";
 import { useState, useCallback } from "react";
 
 let id = 0;
-const origionalId = () => `Item${id++}`;
+const origionalId = () => `I${id++}`;
 
 function Sidebar(props) {
   return (
@@ -143,6 +144,30 @@ function App() {
     setEdges(getEdges().filter((edg) => edg.id != edge.id));
   };
 
+  const isValidConnection = useCallback(
+    (connection) => {
+      // we are using getNodes and getEdges helpers here
+      // to make sure we create isValidConnection function only once
+      const nodes = getNodes();
+      const edges = getEdges();
+      const target = nodes.find((node) => node.id === connection.target);
+      const hasCycle = (node, visited = new Set()) => {
+        if (visited.has(node.id)) return false;
+
+        visited.add(node.id);
+
+        for (const outgoer of getOutgoers(node, nodes, edges)) {
+          if (outgoer.id === connection.source) return true;
+          if (hasCycle(outgoer, visited)) return true;
+        }
+      };
+
+      if (target.id === connection.source) return false;
+      return !hasCycle(target);
+    },
+    [getNodes, getEdges]
+  );
+
   return (
     <>
       <Sidebar onNodeDrag={onNodeDrag} />
@@ -163,6 +188,7 @@ function App() {
           autoPanOnNodeDrag={false}
           onNodeDragStop={onNodeDragStop}
           onEdgeClick={onEdgeClick}
+          isValidConnection={isValidConnection}
           fitView
         >
           <Background />

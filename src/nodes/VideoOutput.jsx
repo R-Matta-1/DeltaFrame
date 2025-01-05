@@ -28,6 +28,17 @@ function TokenizeString(string) {
   return tokenizedString;
 }
 
+function RemoveRepeat(string) {
+  let arr = string.split(";");
+  let newarr = [];
+  arr.forEach((element) => {
+    if (!newarr.includes(element)) {
+      newarr.push(element);
+    }
+  });
+  return newarr.join(";");
+}
+
 export default function VideoOutput({ id, x, y, Data }) {
   const { getNodes, getEdges, getNode, getHandleConnections } = useReactFlow();
 
@@ -68,13 +79,13 @@ export default function VideoOutput({ id, x, y, Data }) {
 
   // generate the ffmpeg command
   const generateCommand = () => {
-    console.log(getEdges());
     // Generate the ffmpeg command
     let FFMinputFiles = [];
     const thisNode = getNode(id);
     let filter = "";
     let input = "";
     let inputNodesAccesed = [];
+    let NamesAsOutputInFiltergraph = [];
     let mapping = "";
 
     let Requirements = getIncomers(thisNode, getNodes(), getEdges());
@@ -115,26 +126,41 @@ export default function VideoOutput({ id, x, y, Data }) {
               FFmFilterNode;
           } else {
             // NOT a input node, so we just add the edge
-            FFmFilterNode = "[" + edge.target + "]" + FFmFilterNode;
+            FFmFilterNode = "[" + edge.source + "]" + FFmFilterNode;
           }
         });
 
-        OutEdges.forEach((edge) => {
-          FFmFilterNode = FFmFilterNode + "[" + edge.target + "]";
-        });
+        // OutEdges must not be empty, because it was added to the Requirements
+        FFmFilterNode = FFmFilterNode + "[" + OutEdges[0].source + "]";
+        NamesAsOutputInFiltergraph.push(OutEdges[0].source);
 
         filter = FFmFilterNode + ";" + filter;
-        continue;
       }
     }
     // remove that leading semicolon in filter
     if (filter[filter.length - 1] == ";") {
-      // i mean.. this is always true but for the sake of readability
       filter = filter.slice(0, -1);
+    }
+    // they have to be removed in a method such that order is preserved (ASK ME IF THIS IS A PROBLEM)
+    filter = RemoveRepeat(filter);
+
+    filter = '-filter_complex "' + filter + '"';
+
+    // now we need to add the mapping
+
+    const DirectConnections = getEdges().filter((edge) => edge.target == id);
+    const DirectVideo = DirectConnections.filter(
+      (edge) => edge.targetHandle.substring(0, 3) == "vid"
+    );
+    const DirectAudio = DirectConnections.filter(
+      (edge) => edge.targetHandle.substring(0, 3) == "aud"
+    );
+
+    if (DirectVideo.length > 0) {
+      mapping += "-map [" + DirectVideo[0].source;
     }
 
     mapping = "-map [" + id + "]" + " outfile.mp4";
-    filter = '-filter_complex "' + filter + '"';
 
     if (filter == '-filter_complex ""') {
       filter = "";
