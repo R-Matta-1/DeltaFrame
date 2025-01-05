@@ -9,7 +9,6 @@ import {
   addEdge,
   useReactFlow,
   ReactFlowProvider,
-  Position,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 

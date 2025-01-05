@@ -56,8 +56,8 @@ function VideoDifference({ id, Data }) {
 
 todo:
 
-- create nore nodes
-- stylize and color
 - input and output setting
 - better error output (a little box would be cool)
 - find a way of making certian node not apear simmilar to a penis
+- create nore nodes
+- stylize and color

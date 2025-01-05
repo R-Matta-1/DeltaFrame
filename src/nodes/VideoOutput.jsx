@@ -38,7 +38,7 @@ export default function VideoOutput({ id, x, y, Data }) {
 
   const [source, setSource] = useState("");
   const [loaded, setLoaded] = useState(false);
-  const [message, setMessage] = useState("messages show up here");
+  const [messages, setMessages] = useState(["FFMPEG Logs:"]);
   const ffmpegRef = useRef(new FFmpeg());
 
   const initalizeFFm = async () => {
@@ -47,7 +47,7 @@ export default function VideoOutput({ id, x, y, Data }) {
     const ffmpeg = ffmpegRef.current;
 
     ffmpeg.on("log", ({ message }) => {
-      setMessage(message);
+      setMessages((previous) => [...previous, message]);
       console.log(message);
     });
     // toBlobURL is used to bypass CORS issue, urls with the same
@@ -132,6 +132,7 @@ export default function VideoOutput({ id, x, y, Data }) {
       // i mean.. this is always true but for the sake of readability
       filter = filter.slice(0, -1);
     }
+
     mapping = "-map [" + id + "]" + " outfile.mp4";
     filter = '-filter_complex "' + filter + '"';
 
@@ -174,7 +175,12 @@ export default function VideoOutput({ id, x, y, Data }) {
       "-y" + input + " " + filter + " -t 3 " + mapping
     );
     console.log(TokenizedCommand);
-    await ffmpeg.exec(TokenizedCommand);
+
+    try {
+      await ffmpeg.exec(TokenizedCommand);
+    } catch (error) {
+      console.error("Error executing ffmpeg command:", error);
+    }
 
     const fileData = await ffmpeg.readFile("outfile.mp4");
     const finalSource = URL.createObjectURL(
@@ -192,7 +198,7 @@ export default function VideoOutput({ id, x, y, Data }) {
       }}
       className="react-flow__node-default"
     >
-      <button onClick={LoadCommand}>gernerate command</button>
+      <button onClick={LoadCommand}>generate command</button>
       <div
         style={{
           backgroundColor: "#000",
@@ -200,6 +206,10 @@ export default function VideoOutput({ id, x, y, Data }) {
           fontSize: "smaller",
           margin: "5px",
           position: "relative",
+          maxHeight: "150px",
+          overflowY: "scroll",
+          padding: "10px",
+          borderRadius: "5px",
         }}
       >
         <button
@@ -235,10 +245,33 @@ export default function VideoOutput({ id, x, y, Data }) {
       {loaded ? (
         <button onClick={GenerateVideo}>generate a clip</button>
       ) : (
-        <button onClick={initalizeFFm}>clk to lod FFM</button>
+        <button onClick={initalizeFFm}>click to load FFMpeg</button>
       )}
-      {source && <video src={source} width={500} controls alt="logo" />}
-      <p>{message}</p>
+
+      {source && <video src={source} width={300} controls alt="logo" />}
+
+      <div
+        style={{
+          backgroundColor: "#000",
+          fontFamily: "monospace",
+          fontSize: "smaller",
+          margin: "5px",
+          position: "relative",
+          maxHeight: "150px",
+          overflowY: "scroll",
+          padding: "10px",
+          borderRadius: "5px",
+          color: "#FFF",
+        }}
+      >
+        {messages.map((message) => (
+          <>
+            <p>{message}</p>
+            <hr />
+          </>
+        ))}
+      </div>
+
       <DivHandle
         type="target"
         id="1"

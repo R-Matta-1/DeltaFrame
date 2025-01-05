@@ -73,6 +73,9 @@ function VideoInput({ id, Data }) {
       file: file,
       StartTime: 0,
     });
+    if (SliderRef.current) {
+      SliderRef.current.value = 0;
+    }
   }
 
   const sliderInputHandle = useCallback(() => {
