@@ -46,9 +46,10 @@ function VideoDifference({ id, Data }) {
 function VideoInput({ id, Data }) {
   const { updateNodeData } = useReactFlow();
   const [VideoLink, setVideoLink] = useState("");
-  const width = 300;
-  const height = 150;
+  const [VideoLength, setVideoLength] = useState(0);
   const inputRef = useRef(null);
+  const SliderRef = useRef(null);
+  const videoRef = useRef(null);
 
   function RedirectClick(event) {
     const HiddenInput = inputRef.current;
@@ -61,6 +62,7 @@ function VideoInput({ id, Data }) {
   }
 
   function InputAdition(e) {
+    if (!e.target?.files[0]) return;
     const file = e.target.files[0];
     const InputVideoURL = URL.createObjectURL(file);
     setVideoLink(InputVideoURL);
@@ -69,32 +71,36 @@ function VideoInput({ id, Data }) {
       fileURL: file.name,
       fileBlobUrl: InputVideoURL,
       file: file,
+      StartTime: 0,
     });
   }
+
+  const sliderInputHandle = useCallback(() => {
+    const SliderValue = SliderRef.current.value;
+    videoRef.current.currentTime = SliderValue;
+    updateNodeData(id, {
+      StartTime: SliderValue,
+    });
+  }, [SliderRef, videoRef, updateNodeData]);
 
   return (
     <div
       style={{
         justifyContent: "center",
-        width: `${width}px`,
-        height: `${height}px`,
+        width: "200px",
+        height: "150px",
       }}
       className="react-flow__node-default"
     >
-      {VideoLink && (
-        <video controls height={height - 30} src={VideoLink}></video>
-      )}
-
       <button
         onClick={RedirectClick}
         style={{
-          position: "absolute",
+          position: "relative",
           width: `100px`,
-          height: `27px`,
+          height: `25px`,
           backgroundColor: "#bbd",
           justifyContent: "center",
-          bottom: "3px",
-          left: `${width / 2 - 100 / 2}px`,
+          top: "-12.5px",
         }}
       >
         Click To Input
@@ -102,12 +108,39 @@ function VideoInput({ id, Data }) {
       <input
         hidden
         onChange={InputAdition}
-        style={{ position: "absolute" }}
+        style={{ position: "relative" }}
         ref={inputRef}
         type="file"
         className="videoInput"
         accept="video/*"
       />
+
+      {VideoLink && (
+        <>
+          <video
+            height={"100px"}
+            ref={videoRef}
+            onLoadedMetadata={() => {
+              setVideoLength(videoRef.current.duration);
+            }}
+            src={VideoLink}
+          >
+            needs video suprt
+          </video>
+          <br />
+          <label htmlFor="in">VideoStart</label>
+          <input
+            className="nodrag"
+            type="range"
+            min={0}
+            max={VideoLength}
+            step={0.1}
+            name="in"
+            ref={SliderRef}
+            onChange={sliderInputHandle}
+          />
+        </>
+      )}
 
       <DivHandle
         type="source"

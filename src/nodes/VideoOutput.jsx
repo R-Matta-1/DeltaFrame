@@ -84,7 +84,8 @@ export default function VideoOutput({ id, x, y, Data }) {
       Requirements.push(...getIncomers(node, getNodes(), getEdges()));
 
       if (node?.data?.fileURL) {
-        input = input + ` -i \"${node.data.fileURL}\" `;
+        input =
+          input + ` -ss ${node.data.StartTime} -i \"${node.data.fileURL}\"`;
         FFMinputFiles.push(node.data.file);
         continue;
       }
@@ -232,7 +233,7 @@ export default function VideoOutput({ id, x, y, Data }) {
 
       <br />
       {loaded ? (
-        <button onClick={GenerateVideo}>now generate thing</button>
+        <button onClick={GenerateVideo}>generate a clip</button>
       ) : (
         <button onClick={initalizeFFm}>clk to lod FFM</button>
       )}
