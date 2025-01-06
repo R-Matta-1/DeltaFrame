@@ -15,7 +15,8 @@ export function DivHandle(unalteredParams) {
     borderRadius: "20%",
     width: "20px",
     height: "20px",
-    font: "8px  Verdana black",
+    fontFamily: "monospace",
+    fontSize: "15px",
     backgroundColor: StyleColor,
     zIndex: 100,
     ...params.style,
@@ -24,8 +25,10 @@ export function DivHandle(unalteredParams) {
   return (
     <>
       <Handle {...params} style={style}>
-        {params.mediaType == MediaTypes.VIDEO ? "V" : null}
-        {params.mediaType == MediaTypes.AUDIO ? "A" : null}
+        <p style={{ margin: "auto", padding: "3px" }}>
+          {params.mediaType == MediaTypes.VIDEO ? "V" : null}
+          {params.mediaType == MediaTypes.AUDIO ? "A" : null}
+        </p>
       </Handle>
     </>
   );
