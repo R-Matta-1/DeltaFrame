@@ -88,16 +88,21 @@ export default function VideoOutput({ id, x, y, Data }) {
     let NamesAsOutputInFiltergraph = [];
     let mapping = "";
 
-    let Requirements = getIncomers(thisNode, getNodes(), getEdges());
+    let Requirements = [thisNode];
 
     while (Requirements.length != 0) {
       const node = Requirements.shift();
       Requirements.push(...getIncomers(node, getNodes(), getEdges()));
 
-      if (node?.data?.fileURL) {
+      if (node?.type === "Input") {
         input =
-          input + ` -ss ${node.data.StartTime} -i \"${node.data.fileURL}\"`;
+          input + ` -ss ${node.data.StartTime} -i \"${node.data?.fileURL}\"`;
         FFMinputFiles.push(node.data.file);
+
+        // btw if the connnection is direct then no one has noted this input guy before
+        if (!inputNodesAccesed.includes(node.id)) {
+          inputNodesAccesed.push(node.id);
+        }
         continue;
       }
 
@@ -115,8 +120,6 @@ export default function VideoOutput({ id, x, y, Data }) {
             // the following code
             const IdOfInputNode = getNode(edge.source).id;
             if (!inputNodesAccesed.includes(IdOfInputNode)) {
-              console.log("adding input node: " + IdOfInputNode);
-              console.log(inputNodesAccesed);
               inputNodesAccesed.push(IdOfInputNode);
             }
             FFmFilterNode =
@@ -149,23 +152,46 @@ export default function VideoOutput({ id, x, y, Data }) {
     // now we need to add the mapping
 
     const DirectConnections = getEdges().filter((edge) => edge.target == id);
+
     const DirectVideo = DirectConnections.filter(
       (edge) => edge.targetHandle.substring(0, 3) == "vid"
     );
+
     const DirectAudio = DirectConnections.filter(
       (edge) => edge.targetHandle.substring(0, 3) == "aud"
     );
 
     if (DirectVideo.length > 0) {
-      mapping += "-map [" + DirectVideo[0].source;
+      const DirectVideoId = DirectVideo[0].source;
+      const DirectVideoType = getNode(DirectVideoId).type;
+      let DirectId = "";
+      if (DirectVideoType == "Input") {
+        DirectId = inputNodesAccesed.indexOf(DirectVideoId) + ":v";
+      } else {
+        DirectId = `"[` + DirectVideo[0].source + `]"`;
+      }
+      mapping += `-map ${DirectId}`;
     }
 
-    mapping = "-map [" + id + "]" + " outfile.mp4";
+    if (DirectAudio.length > 0) {
+      const DirectAudioId = DirectAudio[0].source;
+      const DirectAudioType = getNode(DirectAudioId).type;
+      let DirectId = "";
+
+      if (DirectAudioType == "Input") {
+        DirectId = inputNodesAccesed.indexOf(DirectAudioId) + ":a";
+      } else {
+        DirectId = `"[` + DirectAudio[0].source + `]"`;
+      }
+      mapping += ` -map ${DirectId} `;
+    }
 
     if (filter == '-filter_complex ""') {
       filter = "";
-      mapping = "outfile.mp4";
     }
+    mapping += " outfile.mp4";
+
+    input = input.replace("-ss 0", "");
 
     return [FFMinputFiles, input, filter, mapping];
   };

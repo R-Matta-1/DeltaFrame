@@ -32,6 +32,9 @@ function Sidebar(props) {
             onDragStart={(e) => {
               props.onNodeDrag(e, { keys });
             }}
+            onTouchStart={(e) => {
+              props.onNodeDrag(e, { keys });
+            }}
             className="DraggingDiv"
           >
             <h4 className="NodeName">{keys}</h4>
@@ -105,11 +108,24 @@ function App() {
   };
 
   const onDrop = (event) => {
+    console.log("AAAAAAAAAAAAAAAAA");
+    console.log(event);
     event.preventDefault();
+    let foundX = 0;
+    let foundY = 0;
+    if (event.clientX) {
+      foundX = event.clientX;
+      foundY = event.clientY;
+    } else {
+      foundX = event.changedTouches[0].clientX;
+      foundY = event.changedTouches[0].clientY;
+    }
+
     const newPosition = screenToFlowPosition({
-      x: event.clientX,
-      y: event.clientY,
+      x: foundX,
+      y: foundY,
     });
+
     const newNode = {
       id: origionalId(),
       type: DraggedType,
@@ -125,10 +141,15 @@ function App() {
       // solves double action problem
       setNodes((nds) => nds.concat(newNode));
     }
+    setDraggedType("");
   };
 
   const onNodeDragStop = (event, node, nodes) => {
-    const MouseOnSidebar = event.clientX / window.innerWidth < 0.2;
+    const PixelsInputX = event.clientX
+      ? event.clientX
+      : event.changedTouches[0].clientX;
+
+    const MouseOnSidebar = PixelsInputX / window.innerWidth < 0.15;
     console.log(event.clientX / window.innerWidth);
     if (MouseOnSidebar) {
       setNodes(getNodes().filter((nds) => nds.id != node.id));
@@ -180,10 +201,9 @@ function App() {
           onConnect={onConnect}
           nodeTypes={nodeTypes}
           edges={edges}
-          onDropCapture={(e) => {
-            onDrop(e);
-          }}
+          onDropCapture={onDrop}
           onDrop={onDrop}
+          onTouchEndCapture={onDrop}
           onDragOver={onDragOver}
           autoPanOnNodeDrag={false}
           onNodeDragStop={onNodeDragStop}
