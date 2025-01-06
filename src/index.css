@@ -1,17 +1,23 @@
 :root {
-  --sidebar-width: 15%;
+  --sidebar-width: calc(105px);
 }
 body {
-  background-color: #d6daf3;
+  background-color: #97efd9;
 }
 .sidebar {
+  font-family: "Courier New", Courier, monospace;
   position: fixed;
   top: 0;
   left: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  background-color: cadetblue;
-  /* ... other styles ... */
+  background-color: #dcdbc6;
+  border-right: #310119 1px solid;
+}
+.sidebar hr {
+  height: 3px;
+  background-color: #161214;
+  border: 0;
 }
 
 .NodeHolder {
@@ -24,6 +30,11 @@ body {
   font-family: "Courier New", Courier, monospace;
   font-weight: bolder;
   font-size: smaller;
+}
+.DraggingDiv hr {
+  height: 1px;
+  background: #2d0047;
+  border: 0;
 }
 
 video {
@@ -54,11 +65,9 @@ video {
 .body {
   position: absolute;
   top: 0.1%;
-  left: calc(var(--sidebar-width) + 0.1%);
+  left: calc(var(--sidebar-width) + 0.5%);
   width: calc(99.8% - var(--sidebar-width));
   height: 99.7%;
-
-  /* ... other styles ... */
 }
 
 .sidebar h1 {

@@ -22,7 +22,7 @@ const origionalId = () => `I${id++}`;
 function Sidebar(props) {
   return (
     <div className="sidebar">
-      <h1>Delta Frame</h1>
+      <h1>FFmpeg Generator</h1>
       <hr />
       <div className="NodeHolder">
         {Object.entries(nodeTypes).map(([keys]) => (
@@ -149,7 +149,7 @@ function App() {
       ? event.clientX
       : event.changedTouches[0].clientX;
 
-    const MouseOnSidebar = PixelsInputX / window.innerWidth < 0.15;
+    const MouseOnSidebar = PixelsInputX < 105;
     console.log(event.clientX / window.innerWidth);
     if (MouseOnSidebar) {
       setNodes(getNodes().filter((nds) => nds.id != node.id));
