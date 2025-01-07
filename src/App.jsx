@@ -210,9 +210,7 @@ function App() {
           onEdgeClick={onEdgeClick}
           isValidConnection={isValidConnection}
           fitView
-        >
-          <Background />
-        </ReactFlow>
+        ></ReactFlow>
       </div>
     </>
   );

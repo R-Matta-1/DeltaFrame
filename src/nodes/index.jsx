@@ -12,7 +12,7 @@ function VideoDifference({ id, Data }) {
   return (
     <>
       <div
-        style={{ height: "20%", padding: "0" }}
+        style={{ height: "15%", width: "110px", padding: "0" }}
         className="react-flow__node-default"
       >
         <p style={{ font: "15px Verdana" }}>Difference</p>
@@ -30,6 +30,53 @@ function VideoDifference({ id, Data }) {
           position={Position.Left}
           mediaType={MediaTypes.VIDEO}
           style={{ top: "25%" }}
+        />
+
+        <DivHandle
+          type="source"
+          id="3"
+          position={Position.Right}
+          mediaType={MediaTypes.VIDEO}
+        />
+      </div>
+    </>
+  );
+}
+
+function VideoScale({ id, Data }) {
+  const { updateNodeData } = useReactFlow();
+  const XinputRef = useRef();
+  const YinputRef = useRef();
+  const [Ratio, setRatio] = useState({ x: 100, y: 100 });
+  useEffect(() => {
+    updateNodeData(id, { FFmFilterNode: `scale=${Ratio.x}:${Ratio.y}` });
+  }, []);
+
+  const inputStyle = {
+    display: "inline",
+    width: "16px",
+    fontSize: "10px",
+    margin: "0",
+  };
+  const XInputHandle = () => {};
+  const YInputHandle = () => {};
+  return (
+    <>
+      <div
+        style={{ height: "15%", width: "150px", padding: "0" }}
+        className="react-flow__node-default"
+      >
+        <p style={{ font: "15px Verdana" }}>
+          scale=
+          <input onChange={XInputHandle} style={inputStyle} type="number" />:
+          <input onChange={YInputHandle} style={inputStyle} type="number" />
+        </p>
+
+        <DivHandle
+          type="target"
+          id="2"
+          position={Position.Left}
+          mediaType={MediaTypes.VIDEO}
         />
 
         <DivHandle
@@ -166,8 +213,9 @@ function VideoInput({ id, Data }) {
 
 export const nodeTypes = {
   Output: VideoOutput,
-  Difference: VideoDifference,
   Input: VideoInput,
+  Difference: VideoDifference,
+  Scale: VideoScale,
 };
 
 /// THis should be the ONLY place where the names are hardcoded
