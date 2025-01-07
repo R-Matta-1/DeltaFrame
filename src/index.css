@@ -2,7 +2,7 @@
   --sidebar-width: calc(105px);
 }
 body {
-  background-color: #97efd9;
+  background-color: #f9fbfd;
 }
 .sidebar {
   font-family: "Courier New", Courier, monospace;
@@ -11,8 +11,9 @@ body {
   left: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  background-color: #dcdbc6;
-  border-right: #310119 1px solid;
+  background-color: #e9eef6;
+  border-right: #6e7172 1px solid;
+  box-shadow: 0 6px 15px 0 rgba(0, 0, 0, 0.3);
 }
 .sidebar hr {
   height: 3px;
@@ -22,6 +23,7 @@ body {
 
 .NodeHolder {
   overflow-x: scroll;
+
   max-height: 80%;
 }
 
@@ -91,4 +93,7 @@ video {
 .sidebar img {
   max-width: 100%;
   height: auto;
+}
+.react-flow__node-default {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
