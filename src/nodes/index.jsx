@@ -43,7 +43,7 @@ function VideoDifference({ id, Data }) {
 
 function VideoScale({ id, Data }) {
   const { updateNodeData } = useReactFlow();
-  const [Ratio, setRatio] = useState({ x: 100, y: 100 });
+  const [Ratio, setRatio] = useState({ x: 640, y: 360 });
   useEffect(() => {
     updateNodeData(id, { FFmFilterNode: `scale=${Ratio.x}:${Ratio.y}` });
     console.log(Ratio);
@@ -60,7 +60,7 @@ function VideoScale({ id, Data }) {
 
   const inputStyle = {
     display: "inline",
-    width: "16px",
+    width: "20px",
     fontSize: "10px",
     margin: "0",
   };
@@ -71,9 +71,35 @@ function VideoScale({ id, Data }) {
     >
       <p style={{ font: "15px Verdana" }}>
         scale=
-        <input onChange={XInputHandle} style={inputStyle} type="number" />:
-        <input onChange={YInputHandle} style={inputStyle} type="number" />
+        <input
+          onChange={XInputHandle}
+          style={inputStyle}
+          type="number"
+          min="1"
+          max="999"
+          placeholder="640"
+        />
+        :
+        <input
+          onChange={YInputHandle}
+          style={inputStyle}
+          type="number"
+          min="1"
+          max="999"
+          placeholder="360"
+        />
       </p>
+      <div
+        style={{
+          border: "solid 1px black ",
+          width: `${Ratio.x / 10}px`,
+          height: `${Ratio.y / 10}px`,
+          maxWidth: "140px",
+          maxHeight: "140px",
+          margin: "auto",
+          marginBottom: "10px",
+        }}
+      ></div>
 
       <DivHandle
         type="target"
