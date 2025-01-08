@@ -66,7 +66,11 @@ function App() {
     []
   );
 
-  const onConnect = useCallback((newEdge) => {
+  const onConnect = useCallback((newEdgeNoStyle) => {
+    const newEdge = {
+      ...newEdgeNoStyle,
+      style: { stroke: "#000", strokeWidth: 3 },
+    };
     const newEdges = edges.concat(newEdge);
 
     const repeatedTargetEdges = newEdges.filter((eds) => {
@@ -74,10 +78,9 @@ function App() {
         eds.targetHandle == newEdge.targetHandle && eds.target == newEdge.target
       );
     });
-    console.log(repeatedTargetEdges.length);
 
     if (repeatedTargetEdges.length > 1) {
-      console.log("already another edge else with this as a targert");
+      // console.log("already another edge else with this as a targert");
       return;
     }
 
@@ -104,12 +107,9 @@ function App() {
 
   const onDragOver = (event) => {
     event.preventDefault();
-    console.log(DraggedType);
   };
 
   const onDrop = (event) => {
-    console.log("AAAAAAAAAAAAAAAAA");
-    console.log(event);
     event.preventDefault();
     let foundX = 0;
     let foundY = 0;
