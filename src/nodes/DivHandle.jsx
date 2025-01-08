@@ -10,7 +10,6 @@ export function DivHandle(unalteredParams) {
 
   const style = {
     border: "solid black 1px",
-    zIndex: -1,
     position: "absolute",
     borderRadius: "20%",
     width: "20px",
@@ -25,7 +24,14 @@ export function DivHandle(unalteredParams) {
   return (
     <>
       <Handle {...params} style={style}>
-        <p style={{ margin: "auto", padding: "3px" }}>
+        <p
+          style={{
+            margin: "auto",
+            zIndex: -1,
+            padding: "3px",
+            pointerEvents: "none",
+          }}
+        >
           {params.mediaType == MediaTypes.VIDEO ? "V" : null}
           {params.mediaType == MediaTypes.AUDIO ? "A" : null}
         </p>
