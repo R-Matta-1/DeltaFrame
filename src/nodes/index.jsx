@@ -10,47 +10,53 @@ function VideoDifference({ id, Data }) {
     updateNodeData(id, { FFmFilterNode: "blend=difference" });
   }, []);
   return (
-    <>
-      <div
-        style={{ height: "15%", width: "110px", padding: "0" }}
-        className="react-flow__node-default"
-      >
-        <p style={{ font: "15px Verdana" }}>Difference</p>
+    <div
+      style={{ height: "15%", width: "110px", padding: "0" }}
+      className="react-flow__node-default"
+    >
+      <p style={{ font: "15px Verdana" }}>Difference</p>
 
-        <DivHandle
-          type="target"
-          id="1"
-          position={Position.Left}
-          mediaType={MediaTypes.VIDEO}
-          style={{ top: "75%" }}
-        />
-        <DivHandle
-          type="target"
-          id="2"
-          position={Position.Left}
-          mediaType={MediaTypes.VIDEO}
-          style={{ top: "25%" }}
-        />
+      <DivHandle
+        type="target"
+        id="1"
+        position={Position.Left}
+        mediaType={MediaTypes.VIDEO}
+        style={{ top: "75%" }}
+      />
+      <DivHandle
+        type="target"
+        id="2"
+        position={Position.Left}
+        mediaType={MediaTypes.VIDEO}
+        style={{ top: "25%" }}
+      />
 
-        <DivHandle
-          type="source"
-          id="3"
-          position={Position.Right}
-          mediaType={MediaTypes.VIDEO}
-        />
-      </div>
-    </>
+      <DivHandle
+        type="source"
+        id="3"
+        position={Position.Right}
+        mediaType={MediaTypes.VIDEO}
+      />
+    </div>
   );
 }
 
 function VideoScale({ id, Data }) {
   const { updateNodeData } = useReactFlow();
-  const XinputRef = useRef();
-  const YinputRef = useRef();
   const [Ratio, setRatio] = useState({ x: 100, y: 100 });
   useEffect(() => {
     updateNodeData(id, { FFmFilterNode: `scale=${Ratio.x}:${Ratio.y}` });
-  }, []);
+    console.log(Ratio);
+  }, [Ratio]);
+
+  const XInputHandle = (event) => {
+    const newVal = event.target.value;
+    setRatio({ ...Ratio, x: newVal });
+  };
+  const YInputHandle = (event) => {
+    const newVal = event.target.value;
+    setRatio({ ...Ratio, y: newVal });
+  };
 
   const inputStyle = {
     display: "inline",
@@ -58,35 +64,31 @@ function VideoScale({ id, Data }) {
     fontSize: "10px",
     margin: "0",
   };
-  const XInputHandle = () => {};
-  const YInputHandle = () => {};
   return (
-    <>
-      <div
-        style={{ height: "15%", width: "150px", padding: "0" }}
-        className="react-flow__node-default"
-      >
-        <p style={{ font: "15px Verdana" }}>
-          scale=
-          <input onChange={XInputHandle} style={inputStyle} type="number" />:
-          <input onChange={YInputHandle} style={inputStyle} type="number" />
-        </p>
+    <div
+      style={{ height: "15%", width: "150px", padding: "0" }}
+      className="react-flow__node-default"
+    >
+      <p style={{ font: "15px Verdana" }}>
+        scale=
+        <input onChange={XInputHandle} style={inputStyle} type="number" />:
+        <input onChange={YInputHandle} style={inputStyle} type="number" />
+      </p>
 
-        <DivHandle
-          type="target"
-          id="2"
-          position={Position.Left}
-          mediaType={MediaTypes.VIDEO}
-        />
+      <DivHandle
+        type="target"
+        id="2"
+        position={Position.Left}
+        mediaType={MediaTypes.VIDEO}
+      />
 
-        <DivHandle
-          type="source"
-          id="3"
-          position={Position.Right}
-          mediaType={MediaTypes.VIDEO}
-        />
-      </div>
-    </>
+      <DivHandle
+        type="source"
+        id="3"
+        position={Position.Right}
+        mediaType={MediaTypes.VIDEO}
+      />
+    </div>
   );
 }
 
