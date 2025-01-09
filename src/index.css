@@ -90,6 +90,13 @@ video {
   border-radius: 4px;
 }
 
+code {
+  background-color: #161214;
+  color: #f9fbfd;
+  padding: 2px;
+  font-family: "Courier New", Courier, monospace;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

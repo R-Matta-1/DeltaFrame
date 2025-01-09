@@ -60,46 +60,36 @@ function VideoScale({ id, Data }) {
 
   const inputStyle = {
     display: "inline",
-    width: "20px",
+    width: "33px",
     fontSize: "10px",
     margin: "0",
   };
   return (
     <div
-      style={{ height: "15%", width: "150px", padding: "0" }}
+      style={{ height: "15%", width: "170px", padding: "0" }}
       className="react-flow__node-default"
     >
-      <p style={{ font: "15px Verdana" }}>
+      <p style={{ font: "14px monospace" }}>
         scale=
-        <input
-          onChange={XInputHandle}
-          style={inputStyle}
-          type="number"
-          min="1"
-          max="999"
-          placeholder="640"
-        />
+        <input onChange={XInputHandle} style={inputStyle} placeholder="640" />
         :
-        <input
-          onChange={YInputHandle}
-          style={inputStyle}
-          type="number"
-          min="1"
-          max="999"
-          placeholder="360"
-        />
+        <input onChange={YInputHandle} style={inputStyle} placeholder="360" />
       </p>
-      <div
+      <p
         style={{
-          border: "solid 1px black ",
-          width: `${Ratio.x / 10}px`,
-          height: `${Ratio.y / 10}px`,
           maxWidth: "140px",
           maxHeight: "140px",
           margin: "auto",
-          marginBottom: "10px",
+          marginBottom: "0px",
+          fontSize: "10px",
+          fontFamily: "monospace",
         }}
-      ></div>
+      >
+        or try using :<code>scale=1280:720</code> <br />
+        <code>scale=iw*0.5:ih*0.5</code> <br />
+        <br />
+        find how to use this <a href="TODO: FIND LINK"> here</a>
+      </p>
 
       <DivHandle
         type="target"
