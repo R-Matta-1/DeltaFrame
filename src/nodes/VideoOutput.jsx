@@ -58,7 +58,7 @@ export default function VideoOutput({ id, x, y, Data }) {
     const ffmpeg = ffmpegRef.current;
 
     ffmpeg.on("log", ({ message }) => {
-      setMessages((previous) => [...previous, message]);
+      setMessages((previous) => [message, ...previous.slice(0, 10)]);
       console.log(message);
     });
     // toBlobURL is used to bypass CORS issue, urls with the same
