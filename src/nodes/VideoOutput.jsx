@@ -49,10 +49,12 @@ export default function VideoOutput({ id, x, y, Data }) {
 
   const [source, setSource] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [StartedLoading, setStartedLoading] = useState(false);
   const [messages, setMessages] = useState(["FFMPEG Logs:"]);
   const ffmpegRef = useRef(new FFmpeg());
 
   const initalizeFFm = async () => {
+    setStartedLoading(true);
     const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd";
 
     const ffmpeg = ffmpegRef.current;
@@ -294,9 +296,8 @@ export default function VideoOutput({ id, x, y, Data }) {
       </div>
 
       <br />
-      {loaded ? (
-        <button onClick={GenerateVideo}>generate a clip</button>
-      ) : (
+      {loaded && <button onClick={GenerateVideo}>generate a clip</button>}
+      {!StartedLoading && (
         <button onClick={initalizeFFm}>click to load FFMpeg</button>
       )}
 
