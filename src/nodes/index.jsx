@@ -53,6 +53,7 @@ function VideoScale({ id, Data }) {
   const InputHandle = (event) => {
     const newVal = event.target.value;
     const CleanVal = newVal.replace(/['"\s]/g, "");
+    event.target.value = CleanVal;
     setInput(CleanVal);
   };
 
@@ -66,8 +67,8 @@ function VideoScale({ id, Data }) {
   return (
     <div
       style={{
-        height: TutorialOpen ? "600px" : "90px",
-        width: TutorialOpen ? "300px" : "180px",
+        height: TutorialOpen ? "400px" : "90px",
+        width: TutorialOpen ? "450px" : "180px",
         padding: "0",
         overflow: "clip",
       }}
@@ -85,55 +86,8 @@ function VideoScale({ id, Data }) {
         {TutorialOpen ? "close" : "open"} Tutorial
       </button>
       {TutorialOpen && (
-        <div style={{ font: "14px Arial, sans-serif" }}>
-          <h3>Scale Filter Tutorial</h3>
-          <p>
-            <code>scale=w:h:x:y</code>
-          </p>
-          <ul>
-            <li>
-              <code>w</code>: Width
-            </li>
-            <li>
-              <code>h</code>: Height
-            </li>
-            <li>
-              <code>x</code>: Horizontal position
-            </li>
-            <li>
-              <code>y</code>: Vertical position
-            </li>
-          </ul>
-          <p>
-            Using <code>-1</code>, <code>iw</code>, and <code>ih</code>:
-          </p>
-          <ul>
-            <li>
-              <code>-1</code>: Maintains aspect ratio
-            </li>
-            <li>
-              <code>iw</code>: Input width
-            </li>
-            <li>
-              <code>ih</code>: Input height
-            </li>
-          </ul>
-          <h4>Examples</h4>
-          <pre>
-            <code>"scale=640:-1"</code>
-            <p>
-              Resizes the video to 640 pixels wide,
-              <br /> maintaining aspect ratio.
-            </p>
-          </pre>
-          <pre>
-            <code>"scale=iw/2:ih/2:iw/4:ih/4"</code>
-            <p>
-              Resizes the video to half its original width and height, <br />
-              and then positions it at one-quarter <br />
-              of the original width and height.
-            </p>
-          </pre>
+        <div style={{ padding: 0 }}>
+          <iframe src="https://matplotlib.org/stable/gallery/subplots_axes_and_figures/broken_axis.html"></iframe>
         </div>
       )}
       <DivHandle
