@@ -43,61 +43,105 @@ function VideoDifference({ id, Data }) {
 
 function VideoScale({ id, Data }) {
   const { updateNodeData } = useReactFlow();
-  const [Ratio, setRatio] = useState({ x: 640, y: 360 });
+  const [Input, setInput] = useState("iw:ih:0:0");
+  const [TutorialOpen, setTutorialOpen] = useState(false);
   useEffect(() => {
-    updateNodeData(id, { FFmFilterNode: `scale=${Ratio.x}:${Ratio.y}` });
-    console.log(Ratio);
-  }, [Ratio]);
+    updateNodeData(id, { FFmFilterNode: `scale=${Input}` });
+    console.log(Input);
+  }, [Input]);
 
-  const XInputHandle = (event) => {
+  const InputHandle = (event) => {
     const newVal = event.target.value;
-    setRatio({ ...Ratio, x: newVal });
-  };
-  const YInputHandle = (event) => {
-    const newVal = event.target.value;
-    setRatio({ ...Ratio, y: newVal });
+    const CleanVal = newVal.replace(/['"\s]/g, "");
+    setInput(CleanVal);
   };
 
   const inputStyle = {
     display: "inline",
-    width: "33px",
+    width: "140px",
     fontSize: "10px",
     margin: "0",
+    textAlign: "center",
   };
   return (
     <div
-      style={{ height: "15%", width: "170px", padding: "0" }}
+      style={{
+        height: TutorialOpen ? "600px" : "90px",
+        width: TutorialOpen ? "300px" : "180px",
+        padding: "0",
+        overflow: "clip",
+      }}
       className="react-flow__node-default"
     >
-      <p style={{ font: "14px monospace" }}>
+      <p style={{ font: "16px Arial, sans-serif" }}>
         scale=
-        <input onChange={XInputHandle} style={inputStyle} placeholder="640" />
-        :
-        <input onChange={YInputHandle} style={inputStyle} placeholder="360" />
+        <input
+          onChange={InputHandle}
+          style={inputStyle}
+          placeholder="iw:ih:0:0"
+        />
       </p>
-      <p
-        style={{
-          maxWidth: "140px",
-          maxHeight: "140px",
-          margin: "auto",
-          marginBottom: "0px",
-          fontSize: "10px",
-          fontFamily: "monospace",
-        }}
-      >
-        or try using :<code>scale=1280:720</code> <br />
-        <code>scale=iw*0.5:ih*0.5</code> <br />
-        <br />
-        find how to use this <a href="TODO: FIND LINK"> here</a>
-      </p>
-
+      <button onClick={() => setTutorialOpen(!TutorialOpen)}>
+        {TutorialOpen ? "close" : "open"} Tutorial
+      </button>
+      {TutorialOpen && (
+        <div style={{ font: "14px Arial, sans-serif" }}>
+          <h3>Scale Filter Tutorial</h3>
+          <p>
+            <code>scale=w:h:x:y</code>
+          </p>
+          <ul>
+            <li>
+              <code>w</code>: Width
+            </li>
+            <li>
+              <code>h</code>: Height
+            </li>
+            <li>
+              <code>x</code>: Horizontal position
+            </li>
+            <li>
+              <code>y</code>: Vertical position
+            </li>
+          </ul>
+          <p>
+            Using <code>-1</code>, <code>iw</code>, and <code>ih</code>:
+          </p>
+          <ul>
+            <li>
+              <code>-1</code>: Maintains aspect ratio
+            </li>
+            <li>
+              <code>iw</code>: Input width
+            </li>
+            <li>
+              <code>ih</code>: Input height
+            </li>
+          </ul>
+          <h4>Examples</h4>
+          <pre>
+            <code>"scale=640:-1"</code>
+            <p>
+              Resizes the video to 640 pixels wide,
+              <br /> maintaining aspect ratio.
+            </p>
+          </pre>
+          <pre>
+            <code>"scale=iw/2:ih/2:iw/4:ih/4"</code>
+            <p>
+              Resizes the video to half its original width and height, <br />
+              and then positions it at one-quarter <br />
+              of the original width and height.
+            </p>
+          </pre>
+        </div>
+      )}
       <DivHandle
         type="target"
         id="2"
         position={Position.Left}
         mediaType={MediaTypes.VIDEO}
       />
-
       <DivHandle
         type="source"
         id="3"

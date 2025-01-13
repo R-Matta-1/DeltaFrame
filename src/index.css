@@ -95,6 +95,8 @@ code {
   color: #f9fbfd;
   padding: 2px;
   font-family: "Courier New", Courier, monospace;
+  border: 1px solid #ccc;
+  border-radius: 10%;
 }
 
 input::-webkit-outer-spin-button,
