@@ -108,6 +108,7 @@ function VideoScale({ id, Data }) {
 
 function VideoInput({ id, Data }) {
   const { updateNodeData } = useReactFlow();
+  const [ShowVideo, setShowVideo] = useState(false);
   const [VideoLink, setVideoLink] = useState("");
   const [VideoLength, setVideoLength] = useState(0);
   const inputRef = useRef(null);
@@ -149,28 +150,45 @@ function VideoInput({ id, Data }) {
     });
   }, [SliderRef, videoRef, updateNodeData]);
 
+  const buttonStyle = {
+    position: "absolute",
+    width: `50px`,
+    height: `25px`,
+    backgroundColor: "#ece",
+    justifyContent: "center",
+    top: "-6px",
+  };
   return (
     <div
       style={{
         justifyContent: "center",
-        width: "200px",
-        height: "150px",
+        width: ShowVideo && VideoLink ? "500px" : "200px",
+        height: ShowVideo && VideoLink ? "333px" : "100px",
       }}
       className="react-flow__node-default"
     >
       <button
         onClick={RedirectClick}
         style={{
-          position: "relative",
-          width: `100px`,
-          height: `25px`,
-          backgroundColor: "#bbd",
-          justifyContent: "center",
-          top: "-12.5px",
+          ...buttonStyle,
+          left: VideoLink ? "25px" : "90px",
         }}
       >
-        Click To Input
+        Input
       </button>
+
+      {VideoLink && (
+        <button
+          onClick={() => setShowVideo(!ShowVideo)}
+          style={{
+            ...buttonStyle,
+            right: "25px",
+          }}
+        >
+          {ShowVideo ? "hide" : "show"}
+        </button>
+      )}
+
       <input
         hidden
         onChange={InputAdition}
@@ -184,7 +202,8 @@ function VideoInput({ id, Data }) {
       {VideoLink && (
         <>
           <video
-            height={"100px"}
+            controls={ShowVideo}
+            style={{ maxHeight: "100%", maxWidth: "calc(100% - 20px)" }}
             ref={videoRef}
             onLoadedMetadata={() => {
               setVideoLength(videoRef.current.duration);
