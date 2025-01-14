@@ -3,19 +3,62 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 import { DivHandle, getDivHandleId, MediaTypes } from "./DivHandle";
 import VideoOutput from "./VideoOutput";
-import MediaDisplay from "../MediaDisplay";
 
-function VideoDifference({ id, Data }) {
+function VideoBlend({ id, Data }) {
   const { updateNodeData } = useReactFlow();
+  const [Input, setInput] = useState("difference");
+  const [TutorialOpen, setTutorialOpen] = useState(false);
   useEffect(() => {
-    updateNodeData(id, { FFmFilterNode: "blend=difference" });
-  }, []);
+    updateNodeData(id, { FFmFilterNode: `blend=${Input}` });
+    console.log(Input);
+  }, [Input]);
+
+  const InputHandle = (event) => {
+    const newVal = event.target.value;
+    const CleanVal = newVal.replace(/['"\s]/g, "");
+    event.target.value = CleanVal;
+    setInput(CleanVal);
+  };
+
+  const inputStyle = {
+    display: "inline",
+    width: "140px",
+    fontSize: "10px",
+    margin: "0",
+    textAlign: "center",
+  };
   return (
     <div
-      style={{ height: "15%", width: "110px", padding: "0" }}
+      style={{
+        height: TutorialOpen ? "600px" : "90px",
+        width: TutorialOpen ? "550px" : "180px",
+        padding: "0",
+        overflow: "clip",
+      }}
       className="react-flow__node-default"
     >
-      <p style={{ font: "15px Verdana" }}>Difference</p>
+      <p style={{ font: "16px Arial, sans-serif" }}>
+        blend=
+        <input
+          onChange={InputHandle}
+          style={inputStyle}
+          placeholder="difference"
+        />
+      </p>
+      <button onClick={() => setTutorialOpen(!TutorialOpen)}>
+        {TutorialOpen ? "close" : "open"} Tutorial
+      </button>
+      {TutorialOpen && (
+        <iframe
+          style={{
+            margin: "3px",
+            width: "95%",
+            height: "95%",
+            border: "black 1px solid",
+          }}
+          src="https://trac.ffmpeg.org/wiki/Blend"
+        ></iframe>
+      )}
 
       <DivHandle
         type="target"
@@ -283,7 +326,7 @@ function VideoInput({ id, Data }) {
 export const nodeTypes = {
   Output: VideoOutput,
   Input: VideoInput,
-  Difference: VideoDifference,
+  Blend: VideoBlend,
   Scale: VideoScale,
 };
 
@@ -291,6 +334,6 @@ export const nodeTypes = {
 export const InitalNodes = [
   { id: "a", type: "Input", position: { x: 10, y: 50 }, data: {} },
   { id: "d", type: "Input", position: { x: 10, y: 270 }, data: {} },
-  { id: "b", type: "Difference", position: { x: 365, y: 150 }, data: {} },
+  { id: "b", type: "Blend", position: { x: 365, y: 150 }, data: {} },
   { id: "c", type: "Output", position: { x: 370, y: 390 }, data: {} },
 ];
