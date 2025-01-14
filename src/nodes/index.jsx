@@ -68,8 +68,8 @@ function VideoScale({ id, Data }) {
   return (
     <div
       style={{
-        height: TutorialOpen ? "400px" : "90px",
-        width: TutorialOpen ? "450px" : "180px",
+        height: TutorialOpen ? "600px" : "90px",
+        width: TutorialOpen ? "550px" : "180px",
         padding: "0",
         overflow: "clip",
       }}
@@ -87,9 +87,15 @@ function VideoScale({ id, Data }) {
         {TutorialOpen ? "close" : "open"} Tutorial
       </button>
       {TutorialOpen && (
-        <div style={{ padding: 0 }}>
-          <iframe src="https://matplotlib.org/stable/gallery/subplots_axes_and_figures/broken_axis.html"></iframe>
-        </div>
+        <iframe
+          style={{
+            margin: "3px",
+            width: "95%",
+            height: "95%",
+            border: "black 1px solid",
+          }}
+          src="https://trac.ffmpeg.org/wiki/Scaling"
+        ></iframe>
       )}
       <DivHandle
         type="target"
