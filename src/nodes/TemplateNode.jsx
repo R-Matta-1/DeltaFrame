@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { DivHandle, MediaTypes } from "./DivHandle";
 import { useReactFlow, Position } from "@xyflow/react";
 
-const TemplateNodeCreator = ({ config }) => {
+const TemplateNodeCreator = (label, placeholder, tutorialLink, handles) => {
   return function Node({ id, data }) {
     const { updateNodeData } = useReactFlow();
-    const [Input, setInput] = useState(config.placeholder || "");
+    const [Input, setInput] = useState(placeholder || "");
     const [tutorialOpen, setTutorialOpen] = useState(false);
 
     useEffect(() => {
       updateNodeData(id, {
-        FFmFilterNode: `${config.label || ""}${Input}`,
+        FFmFilterNode: `${label || ""}${Input}`,
       });
     }, [Input]);
 
@@ -30,7 +30,7 @@ const TemplateNodeCreator = ({ config }) => {
         className="react-flow__node-default"
       >
         <p style={{ font: "16px Arial, sans-serif" }}>
-          {config.label}
+          {label}
           <input
             onChange={handleInputChange}
             style={{
@@ -40,7 +40,7 @@ const TemplateNodeCreator = ({ config }) => {
               margin: "0",
               textAlign: "center",
             }}
-            placeholder={config.placeholder}
+            placeholder={placeholder}
           />
         </p>
         <button onClick={() => setTutorialOpen(!tutorialOpen)}>
@@ -54,11 +54,11 @@ const TemplateNodeCreator = ({ config }) => {
               height: "95%",
               border: "black 1px solid",
             }}
-            src={config.tutorialLink || "https://trac.ffmpeg.org/wiki/Scaling"}
+            src={tutorialLink || "https://trac.ffmpeg.org/wiki/Scaling"}
           ></iframe>
         )}
 
-        {config.handles.map((handle, index) => (
+        {handles.map((handle, index) => (
           <DivHandle
             key={index}
             type={handle.type}

@@ -3,78 +3,7 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 import { DivHandle, getDivHandleId, MediaTypes } from "./DivHandle";
 import VideoOutput from "./VideoOutput";
-import CreateNode from "./TemplateNode";
-
-function VideoScale({ id, Data }) {
-  const { updateNodeData } = useReactFlow();
-  const [Input, setInput] = useState("iw:ih:0:0");
-  const [TutorialOpen, setTutorialOpen] = useState(false);
-  useEffect(() => {
-    updateNodeData(id, { FFmFilterNode: `scale=${Input}` });
-    console.log(Input);
-  }, [Input]);
-
-  const InputHandle = (event) => {
-    const newVal = event.target.value;
-    const CleanVal = newVal.replace(/['"\s]/g, "");
-    event.target.value = CleanVal;
-    setInput(CleanVal);
-  };
-
-  const inputStyle = {
-    display: "inline",
-    width: "140px",
-    fontSize: "10px",
-    margin: "0",
-    textAlign: "center",
-  };
-  return (
-    <div
-      style={{
-        height: TutorialOpen ? "600px" : "90px",
-        width: TutorialOpen ? "550px" : "180px",
-        padding: "0",
-        overflow: "clip",
-      }}
-      className="react-flow__node-default"
-    >
-      <p style={{ font: "16px Arial, sans-serif" }}>
-        scale=
-        <input
-          onChange={InputHandle}
-          style={inputStyle}
-          placeholder="iw:ih:0:0"
-        />
-      </p>
-      <button onClick={() => setTutorialOpen(!TutorialOpen)}>
-        {TutorialOpen ? "close" : "open"} Tutorial
-      </button>
-      {TutorialOpen && (
-        <iframe
-          style={{
-            margin: "3px",
-            width: "95%",
-            height: "95%",
-            border: "black 1px solid",
-          }}
-          src="https://trac.ffmpeg.org/wiki/Scaling"
-        ></iframe>
-      )}
-      <DivHandle
-        type="target"
-        id="2"
-        position={Position.Left}
-        mediaType={MediaTypes.VIDEO}
-      />
-      <DivHandle
-        type="source"
-        id="3"
-        position={Position.Right}
-        mediaType={MediaTypes.VIDEO}
-      />
-    </div>
-  );
-}
+import CreateNodeType from "./TemplateNode";
 
 function VideoInput({ id, Data }) {
   const { updateNodeData } = useReactFlow();
@@ -243,55 +172,71 @@ function VideoInput({ id, Data }) {
   );
 }
 
-const cropVideo = CreateNode({
-  config: {
-    label: "crop=",
-    placeholder: "iw:-1:0:0",
-    tutorialLink: "https://trac.ffmpeg.org/wiki/Blend",
-    handles: [
-      {
-        type: "target",
-        mediaType: MediaTypes.VIDEO,
-        position: Position.Left,
-        style: {},
-      },
-      {
-        type: "source",
-        mediaType: MediaTypes.VIDEO,
-        position: Position.Right,
-        style: {},
-      },
-    ],
-  },
-});
+const VideoScale = CreateNodeType(
+  "crop=",
+  "iw:-1:0:0",
+  "https://trac.ffmpeg.org/wiki/Blend",
+  [
+    {
+      type: "target",
+      mediaType: MediaTypes.VIDEO,
+      position: Position.Left,
+      style: {},
+    },
+    {
+      type: "source",
+      mediaType: MediaTypes.VIDEO,
+      position: Position.Right,
+      style: {},
+    },
+  ]
+);
 
-const VideoBlend = CreateNode({
-  config: {
-    label: "blend=",
-    placeholder: "diffrence",
-    tutorialLink: "https://trac.ffmpeg.org/wiki/Blend",
-    handles: [
-      {
-        type: "target",
-        mediaType: MediaTypes.VIDEO,
-        position: Position.Left,
-        style: { top: "33%" },
-      },
-      {
-        type: "target",
-        mediaType: MediaTypes.VIDEO,
-        position: Position.Left,
-        style: { top: "66%" },
-      },
-      {
-        type: "source",
-        mediaType: MediaTypes.VIDEO,
-        position: Position.Right,
-        style: {},
-      },
-    ],
-  },
-});
+const cropVideo = CreateNodeType(
+  "crop=",
+  "iw:-1:0:0",
+  "https://trac.ffmpeg.org/wiki/Blend",
+  [
+    {
+      type: "target",
+      mediaType: MediaTypes.VIDEO,
+      position: Position.Left,
+      style: {},
+    },
+    {
+      type: "source",
+      mediaType: MediaTypes.VIDEO,
+      position: Position.Right,
+      style: {},
+    },
+  ]
+);
+
+const VideoBlend = CreateNodeType(
+  "blend=",
+  "diffrence",
+  "https://trac.ffmpeg.org/wiki/Blend",
+  [
+    {
+      type: "target",
+      mediaType: MediaTypes.VIDEO,
+      position: Position.Left,
+      style: { top: "33%" },
+    },
+    {
+      type: "target",
+      mediaType: MediaTypes.VIDEO,
+      position: Position.Left,
+      style: { top: "66%" },
+    },
+    {
+      type: "source",
+      mediaType: MediaTypes.VIDEO,
+      position: Position.Right,
+      style: {},
+    },
+  ]
+);
 export const nodeTypes = {
   Output: VideoOutput,
   Input: VideoInput,
