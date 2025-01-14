@@ -3,6 +3,7 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 import { DivHandle, getDivHandleId, MediaTypes } from "./DivHandle";
 import VideoOutput from "./VideoOutput";
+import MediaDisplay from "../MediaDisplay";
 
 function VideoDifference({ id, Data }) {
   const { updateNodeData } = useReactFlow();
@@ -108,9 +109,10 @@ function VideoScale({ id, Data }) {
 
 function VideoInput({ id, Data }) {
   const { updateNodeData } = useReactFlow();
-  const [ShowVideo, setShowVideo] = useState(false);
-  const [VideoLink, setVideoLink] = useState("");
   const [VideoLength, setVideoLength] = useState(0);
+  const [ShowMedia, setShowMedia] = useState(false);
+  const [VideoLink, setVideoLink] = useState("");
+  const [File, setFile] = useState("");
   const inputRef = useRef(null);
   const SliderRef = useRef(null);
   const videoRef = useRef(null);
@@ -130,6 +132,7 @@ function VideoInput({ id, Data }) {
     const file = e.target.files[0];
     const InputVideoURL = URL.createObjectURL(file);
     setVideoLink(InputVideoURL);
+    setFile(file);
     console.log(file);
     updateNodeData(id, {
       fileURL: file.name,
@@ -162,8 +165,8 @@ function VideoInput({ id, Data }) {
     <div
       style={{
         justifyContent: "center",
-        width: ShowVideo && VideoLink ? "500px" : "200px",
-        height: ShowVideo && VideoLink ? "333px" : "100px",
+        width: ShowMedia && VideoLink ? "500px" : "200px",
+        height: ShowMedia && VideoLink ? "333px" : "100px",
       }}
       className="react-flow__node-default"
     >
@@ -179,13 +182,13 @@ function VideoInput({ id, Data }) {
 
       {VideoLink && (
         <button
-          onClick={() => setShowVideo(!ShowVideo)}
+          onClick={() => setShowMedia(!ShowMedia)}
           style={{
             ...buttonStyle,
             right: "25px",
           }}
         >
-          {ShowVideo ? "hide" : "show"}
+          {ShowMedia ? "hide" : "show"}
         </button>
       )}
 
@@ -196,14 +199,18 @@ function VideoInput({ id, Data }) {
         ref={inputRef}
         type="file"
         className="videoInput"
-        accept="video/*"
+        accept="video/*,audio/*,image/*"
       />
 
-      {VideoLink && (
+      {VideoLink && !File.type.startsWith("image") && (
         <>
           <video
-            controls={ShowVideo}
-            style={{ maxHeight: "100%", maxWidth: "calc(100% - 20px)" }}
+            controls={ShowMedia || File.type.startsWith("audio")}
+            style={{
+              marginTop: "15px",
+              maxHeight: "calc(100% - 40px)",
+              maxWidth: "100%",
+            }}
             ref={videoRef}
             onLoadedMetadata={() => {
               setVideoLength(videoRef.current.duration);
@@ -213,7 +220,9 @@ function VideoInput({ id, Data }) {
             needs video suprt
           </video>
           <br />
-          <label htmlFor="in">VideoStart</label>
+          <label style={{ fontFamily: "Arial, sans-serif" }} htmlFor="in">
+            -ss
+          </label>
           <input
             className="nodrag"
             type="range"
@@ -226,12 +235,25 @@ function VideoInput({ id, Data }) {
           />
         </>
       )}
+      {VideoLink && File.type.startsWith("image") && (
+        <img
+          src={VideoLink}
+          type={File.type}
+          style={{ maxHeight: "calc(100% - 20px)", maxWidth: "100%" }}
+        />
+      )}
 
       <DivHandle
         type="source"
         id="1"
         position={Position.Right}
-        style={{ top: "33%" }}
+        style={{
+          top: "33%",
+          backgroundColor:
+            File.type?.startsWith("v") || File.type?.startsWith("i")
+              ? "#cfc"
+              : "#fcc",
+        }}
         mediaType={MediaTypes.VIDEO}
       />
 
@@ -239,7 +261,13 @@ function VideoInput({ id, Data }) {
         type="source"
         id="2"
         position={Position.Right}
-        style={{ top: "66%" }}
+        style={{
+          top: "66%",
+          backgroundColor:
+            File.type?.startsWith("v") || File.type?.startsWith("a")
+              ? "#cfc"
+              : "#fcc",
+        }}
         mediaType={MediaTypes.AUDIO}
       />
     </div>

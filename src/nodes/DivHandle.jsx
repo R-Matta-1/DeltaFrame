@@ -5,7 +5,6 @@ export function getDivHandleId(mediaType, type, id) {
 }
 export function DivHandle(unalteredParams) {
   const params = { ...unalteredParams };
-  const StyleColor = params.type === "target" ? "white" : "white";
   params.id = getDivHandleId(params.mediaType, params.type, params.id);
 
   const style = {
@@ -16,7 +15,7 @@ export function DivHandle(unalteredParams) {
     height: "20px",
     fontFamily: "monospace",
     fontSize: "15px",
-    backgroundColor: StyleColor,
+    backgroundColor: "#eef",
     zIndex: 100,
     ...params.style,
   };

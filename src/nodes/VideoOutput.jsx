@@ -1,8 +1,9 @@
 import { useReactFlow, getIncomers, Position } from "@xyflow/react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { DivHandle, MediaTypes } from "./DivHandle";
+import MediaDisplay from "../MediaDisplay.jsx";
 import CopyIcon from "../copy-svgrepo-com (1).jsx";
 
 function TokenizeString(string) {
@@ -45,9 +46,25 @@ export default function VideoOutput({ id, x, y, Data }) {
   const [FFMinput, setFFMinput] = useState(" ");
   const [FFMfilter, setFFMfilter] = useState(" ");
   const [FFMmap, setFFMmap] = useState(" ");
+  const [Outfile, setOutfile] = useState("outfile");
+  const [selectedMimeType, setSelectedMimeType] = useState("video/mp4");
+  const [OutfileName, setOutfileName] = useState("");
+  useEffect(() => {
+    setOutfileName(
+      Outfile +
+        "." +
+        selectedMimeType.substring(selectedMimeType.indexOf("/") + 1)
+    );
+    console.log(
+      `${Outfile}.${selectedMimeType.substring(
+        selectedMimeType.indexOf("/") + 1
+      )}`
+    );
+  }, [selectedMimeType, Outfile]);
   const [TextCoppied, setTextCoppied] = useState(false);
 
   const [source, setSource] = useState("");
+  const [sourceType, setSourceType] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [StartedLoading, setStartedLoading] = useState(false);
   const [messages, setMessages] = useState(["FFMPEG Logs:"]);
@@ -191,11 +208,17 @@ export default function VideoOutput({ id, x, y, Data }) {
     if (filter == '-filter_complex ""') {
       filter = "";
     }
-    mapping += " outfile.mp4";
 
     input = input.replace("-ss 0", "");
 
-    return [FFMinputFiles, input, filter, mapping];
+    return [
+      FFMinputFiles,
+      input,
+      filter,
+      mapping,
+      OutfileName,
+      selectedMimeType,
+    ];
   };
 
   const CopyCommandToClipboard = () => {
@@ -204,19 +227,20 @@ export default function VideoOutput({ id, x, y, Data }) {
   };
 
   const LoadCommand = () => {
-    const [, FFMinput, FFMfilter, FFMmap] = generateCommand();
+    const [, FFMinput, FFMfilter, FFMmap, FFMoutputName] = generateCommand();
     setFFMinput(FFMinput);
     setFFMfilter(FFMfilter);
-    setFFMmap(FFMmap);
+    setFFMmap(FFMmap + " " + FFMoutputName);
     setTextCoppied(false);
   };
 
   const GenerateVideo = async () => {
-    const [FFMinputFiles, input, filter, mapping] = generateCommand();
+    const [FFMinputFiles, input, filter, mapping, output, outputType] =
+      generateCommand();
     LoadCommand();
 
     const ffmpeg = ffmpegRef.current;
-    console.log("generating video");
+    console.log("generating");
 
     for (let i = 0; i < FFMinputFiles.length; i++) {
       const file = FFMinputFiles[i];
@@ -226,7 +250,7 @@ export default function VideoOutput({ id, x, y, Data }) {
       console.log(file);
     }
     const TokenizedCommand = TokenizeString(
-      "-y" + input + " " + filter + " -t 3 " + mapping
+      "-y" + input + " " + filter + " -t 3 " + mapping + " " + output
     );
     console.log(TokenizedCommand);
 
@@ -236,13 +260,21 @@ export default function VideoOutput({ id, x, y, Data }) {
       console.error("Error executing ffmpeg command:", error);
     }
 
-    const fileData = await ffmpeg.readFile("outfile.mp4");
-    const finalSource = URL.createObjectURL(
-      new Blob([fileData.buffer], { type: "video/mp4" })
-    );
+    const fileData = await ffmpeg.readFile(output);
+    const fileBlob = new Blob([fileData.buffer], { type: outputType });
+    const finalSource = URL.createObjectURL(fileBlob);
+    console.log(fileBlob.type);
     setSource(finalSource);
+    setSourceType(outputType);
   };
 
+  const inlineInputStyle = {
+    display: "inline",
+    width: "40%",
+    height: "20%",
+    whiteSpace: "nowrap",
+    margin: "0 0",
+  };
   return (
     <div
       style={{
@@ -291,8 +323,41 @@ export default function VideoOutput({ id, x, y, Data }) {
         <br />
         <span style={{ color: "#90D7FF" }}>{FFMfilter}</span>
         <br />
-        <span style={{ color: "#C9F90F" }}>{FFMmap}</span>
+        <span style={{ color: "#C9F90F" }}>{FFMmap} </span>
         <br />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <input
+            style={inlineInputStyle}
+            placeholder="outfile"
+            onChange={(e) => {
+              setOutfile(e.target.value ? e.target.value : "outfile");
+            }}
+            type="text"
+          />
+          <select
+            style={inlineInputStyle}
+            onChange={(e) => {
+              setSelectedMimeType(e.target.value);
+              console.log(e.target.value);
+            }}
+          >
+            <option value="video/mp4">.mp4</option>
+            <option value="video/webm">.webm(vid)</option>
+            <option value="video/mpeg">.mpeg</option>
+            <option value="image/jpeg">.jpg</option>
+            <option value="image/jpeg">.jpeg</option>
+            <option value="image/png">.png</option>
+            <option value="image/webp">.webp(img)</option>
+            <option value="audio/mpeg">.mp3</option>
+            <option value="audio/wav">.wav</option>
+          </select>
+        </div>
       </div>
 
       <br />
@@ -300,8 +365,6 @@ export default function VideoOutput({ id, x, y, Data }) {
       {!StartedLoading && (
         <button onClick={initalizeFFm}>click to load FFMpeg</button>
       )}
-
-      {source && <video src={source} width={300} controls alt="logo" />}
 
       <div
         style={{
@@ -324,6 +387,12 @@ export default function VideoOutput({ id, x, y, Data }) {
           </>
         ))}
       </div>
+
+      <MediaDisplay
+        src={source}
+        type={sourceType}
+        style={{ maxHeight: "100%", maxWidth: "100%" }}
+      />
 
       <DivHandle
         type="target"

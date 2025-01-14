@@ -38,8 +38,8 @@ function VideoScale({ id, Data }) {
   return (
     <div
       style={{
-        height: TutorialOpen ? "600px" : "90px",
-        width: TutorialOpen ? "300px" : "180px",
+        height: "90px",
+        width: "180px",
         padding: "0",
         overflow: "clip",
       }}
@@ -53,10 +53,6 @@ function VideoScale({ id, Data }) {
           placeholder="iw:ih:0:0"
         />
       </p>
-      <button onClick={() => setTutorialOpen(!TutorialOpen)}>
-        {TutorialOpen ? "close" : "open"} Tutorial
-      </button>
-      {TutorialOpen && <p>bla bla bla</p>)}
       <DivHandle
         type="target"
         id="2"
@@ -78,11 +74,6 @@ function VideoScale({ id, Data }) {
 
 todo:
 
-- consider defualt nodes / polymorphism templates
-- image compatability
-  - reactive divHandle on input
-  - custom outfile name for types
 - create nore nodes
 - small style changes
-  - reconsider font
   - defualt buttons
