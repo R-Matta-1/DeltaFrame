@@ -117,3 +117,18 @@ input[type="number"] {
 .react-flow__node-default {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
 }
+
+button {
+  background-color: #80bdff;
+  color: rgb(0, 0, 0);
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
