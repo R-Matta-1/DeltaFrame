@@ -399,14 +399,20 @@ export default function VideoOutput({ id, x, y, Data }) {
         id="1"
         mediaType={MediaTypes.VIDEO}
         position={Position.Left}
-        style={{ top: "33%" }}
+        style={{
+          top: "33%",
+          backgroundColor: !selectedMimeType.startsWith("a") ? "#bfb" : "#fbb",
+        }}
       />
       <DivHandle
         type="target"
         id="2"
         mediaType={MediaTypes.AUDIO}
         position={Position.Left}
-        style={{ top: "66%" }}
+        style={{
+          top: "66%",
+          backgroundColor: !selectedMimeType.startsWith("i") ? "#bfb" : "#fbb",
+        }}
       />
     </div>
   );

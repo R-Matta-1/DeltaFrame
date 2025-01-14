@@ -75,5 +75,6 @@ function VideoScale({ id, Data }) {
 todo:
 
 - create nore nodes
+- research node template
 - small style changes
   - defualt buttons
