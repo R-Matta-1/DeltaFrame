@@ -5,9 +5,9 @@ import CreateNodeType from "./TemplateNode";
 import VideoInput from "./VideoInput";
 
 const VideoScale = CreateNodeType(
-  "crop=",
+  "scale=",
   "iw:-1:0:0",
-  "https://trac.ffmpeg.org/wiki/Blend",
+  "https://ffmpeg.org/ffmpeg-filters.html#Examples-115",
   [
     {
       type: "target",
@@ -27,7 +27,7 @@ const VideoScale = CreateNodeType(
 const cropVideo = CreateNodeType(
   "crop=",
   "iw:-1:0:0",
-  "https://trac.ffmpeg.org/wiki/Blend",
+  "https://ffmpeg.org/ffmpeg-filters.html#crop",
   [
     {
       type: "target",
@@ -47,7 +47,7 @@ const cropVideo = CreateNodeType(
 const VideoBlend = CreateNodeType(
   "blend=",
   "diffrence",
-  "https://trac.ffmpeg.org/wiki/Blend",
+  "https://ffmpeg.org/ffmpeg-filters.html#blend-1",
   [
     {
       type: "target",
