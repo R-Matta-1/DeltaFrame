@@ -7,7 +7,9 @@ import VideoInput from "./VideoInput";
 const VideoScale = CreateNodeType(
   "scale=",
   "iw:-1:0:0",
-  "https://ffmpeg.org/ffmpeg-filters.html#Examples-115",
+  function Tutorial() {
+    return <>apple</>;
+  },
   [
     {
       type: "target",
@@ -27,7 +29,9 @@ const VideoScale = CreateNodeType(
 const cropVideo = CreateNodeType(
   "crop=",
   "iw:-1:0:0",
-  "https://ffmpeg.org/ffmpeg-filters.html#crop",
+  function Tutorial() {
+    return <>apple</>;
+  },
   [
     {
       type: "target",
@@ -47,7 +51,9 @@ const cropVideo = CreateNodeType(
 const VideoBlend = CreateNodeType(
   "blend=",
   "diffrence",
-  "https://ffmpeg.org/ffmpeg-filters.html#blend-1",
+  function Tutorial() {
+    return <>apple</>;
+  },
   [
     {
       type: "target",

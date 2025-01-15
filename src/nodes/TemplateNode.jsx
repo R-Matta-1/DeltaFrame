@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DivHandle, MediaTypes } from "./DivHandle";
 import { useReactFlow, Position } from "@xyflow/react";
 
-const TemplateNodeCreator = (label, placeholder, tutorialLink, handles) => {
+const TemplateNodeCreator = (label, placeholder, Tutorial, handles) => {
   return function Node({ id, data }) {
     const { updateNodeData } = useReactFlow();
     const [Input, setInput] = useState(placeholder || "");
@@ -47,15 +47,19 @@ const TemplateNodeCreator = (label, placeholder, tutorialLink, handles) => {
           {tutorialOpen ? "Close" : "Open"} Tutorial
         </button>
         {tutorialOpen && (
-          <iframe
+          <div
             style={{
               margin: "3px",
               width: "95%",
               height: "95%",
               border: "black 1px solid",
+              justifyContent: "center",
+              overflowY: "scroll",
+              overflowX: "hidden",
             }}
-            src={tutorialLink || "https://trac.ffmpeg.org/wiki/Scaling"}
-          ></iframe>
+          >
+            <Tutorial />
+          </div>
         )}
 
         {handles.map((handle, index) => (
