@@ -114,8 +114,10 @@ export default function VideoOutput({ id, x, y, Data }) {
       Requirements.push(...getIncomers(node, getNodes(), getEdges()));
 
       if (node?.type === "Input") {
-        input =
-          input + ` -ss ${node.data.StartTime} -i \"${node.data?.fileURL}\"`;
+        const time =
+          node.data.StartTime == 0 ? "" : ` -ss ${node.data.StartTime} `;
+        input = input + time + ` -i \"${node.data?.fileURL}\"`;
+
         FFMinputFiles.push(node.data.file);
 
         // btw if the connnection is direct then no one has noted this input guy before

@@ -50,7 +50,7 @@ const cropVideo = CreateNodeType(
 
 const VideoBlend = CreateNodeType(
   "blend=",
-  "diffrence",
+  "difference",
   function Tutorial() {
     return <>apple</>;
   },

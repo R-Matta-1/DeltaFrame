@@ -56,6 +56,16 @@ function VideoInput({ id, Data }) {
     });
   }, [SliderRef, videoRef, updateNodeData]);
 
+  function DropHandler(e) {
+    e.preventDefault();
+
+    if (e.dataTransfer.files) {
+      const file = e.dataTransfer.files[0];
+      console.log(file);
+      setFile(file);
+    }
+  }
+
   const buttonStyle = {
     position: "absolute",
     width: `50px`,
@@ -149,8 +159,9 @@ function VideoInput({ id, Data }) {
       {!VideoLink && (
         <div
           onDragOver={(e) => {
-            e.preventDefualt();
+            e.preventDefault();
           }}
+          onDrop={DropHandler}
           style={{ height: "95%", border: "1px dashed black" }}
         >
           <br />
