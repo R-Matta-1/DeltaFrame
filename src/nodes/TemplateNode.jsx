@@ -10,7 +10,7 @@ const TemplateNodeCreator = (label, placeholder, Tutorial, handles) => {
 
     useEffect(() => {
       updateNodeData(id, {
-        FFmFilterNode: `${label || ""}${Input}`,
+        FFmFilterNode: `${label || placeholder}${Input}`,
       });
     }, [Input]);
 
@@ -23,36 +23,43 @@ const TemplateNodeCreator = (label, placeholder, Tutorial, handles) => {
       <div
         style={{
           height: tutorialOpen ? "550px" : "90px",
-          width: tutorialOpen ? "500px" : "180px",
+          width: tutorialOpen ? "450px" : "180px",
           padding: "0",
           overflow: "clip",
+          justifyItems: "center",
         }}
         className="react-flow__node-default"
       >
-        <p style={{ font: "16px Arial, sans-serif" }}>
+        <p style={{ marginBottom: "0", font: "16px Arial, sans-serif" }}>
           {label}
-          <input
-            onChange={handleInputChange}
-            style={{
-              display: "inline",
-              width: "140px",
-              fontSize: "10px",
-              margin: "0",
-              textAlign: "center",
-            }}
-            placeholder={placeholder}
-          />
         </p>
+        <textarea
+          onChange={handleInputChange}
+          style={{
+            resize: "none",
+            display: "inline",
+            width: "140px",
+            fontSize: "10px",
+            margin: "0",
+            textAlign: "center",
+          }}
+          placeholder={placeholder}
+        />
+        <br></br>
         <button onClick={() => setTutorialOpen(!tutorialOpen)}>
           {tutorialOpen ? "Close" : "Open"} Tutorial
         </button>
         {tutorialOpen && (
           <div
             style={{
-              margin: "3px",
+              margin: "4px",
               width: "95%",
               height: "95%",
               border: "black 1px solid",
+              backgroundColor: "#222",
+              color: "#fff",
+              fontFamily: "monospace",
+              fontSize: "35px",
               justifyContent: "center",
               overflowY: "scroll",
               overflowX: "hidden",
