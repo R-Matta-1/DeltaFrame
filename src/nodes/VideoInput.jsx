@@ -15,7 +15,6 @@ function VideoInput({ id, Data }) {
 
   function RedirectClick(event) {
     const HiddenInput = inputRef.current;
-    console.log(HiddenInput);
     if (inputRef.current) {
       console.log("click happen");
 
@@ -23,19 +22,27 @@ function VideoInput({ id, Data }) {
     }
   }
 
+  useEffect(() => {
+    if (File === "") {
+      return;
+    }
+    const InputVideoURL = URL.createObjectURL(File);
+    setVideoLink(InputVideoURL);
+
+    updateNodeData(id, {
+      fileURL: File.name,
+      fileBlobUrl: InputVideoURL,
+      file: File,
+      StartTime: 0,
+    });
+    console.log(File);
+  }, [File]);
+
   function InputAdition(e) {
     if (!e.target?.files[0]) return;
     const file = e.target.files[0];
-    const InputVideoURL = URL.createObjectURL(file);
-    setVideoLink(InputVideoURL);
     setFile(file);
-    console.log(file);
-    updateNodeData(id, {
-      fileURL: file.name,
-      fileBlobUrl: InputVideoURL,
-      file: file,
-      StartTime: 0,
-    });
+
     if (SliderRef.current) {
       SliderRef.current.value = 0;
     }
@@ -137,6 +144,19 @@ function VideoInput({ id, Data }) {
           type={File.type}
           style={{ maxHeight: "calc(100% - 20px)", maxWidth: "100%" }}
         />
+      )}
+
+      {!VideoLink && (
+        <div
+          onDragOver={(e) => {
+            e.preventDefualt();
+          }}
+          style={{ height: "95%", border: "1px dashed black" }}
+        >
+          <br />
+          <br />
+          <p>drop a file, or input manually</p>
+        </div>
       )}
 
       <DivHandle
