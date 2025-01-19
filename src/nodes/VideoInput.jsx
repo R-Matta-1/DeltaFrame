@@ -76,6 +76,10 @@ function VideoInput({ id, Data }) {
   };
   return (
     <div
+      onDragOver={(e) => {
+        e.preventDefault();
+      }}
+      onDrop={DropHandler}
       style={{
         justifyContent: "center",
         width: ShowMedia && VideoLink ? "500px" : "200px",
@@ -157,13 +161,7 @@ function VideoInput({ id, Data }) {
       )}
 
       {!VideoLink && (
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-          }}
-          onDrop={DropHandler}
-          style={{ height: "95%", border: "1px dashed black" }}
-        >
+        <div style={{ height: "95%", border: "1px dashed black" }}>
           <br />
           <br />
           <p>drop a file, or input manually</p>

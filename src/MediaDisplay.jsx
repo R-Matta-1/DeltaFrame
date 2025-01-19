@@ -2,7 +2,7 @@ import React from "react";
 
 const MediaDisplay = ({ src, type, style }) => {
   if (!src) {
-    return null; // Handle case where no source is provided
+    return null; // Handle case wherenpm in no source is provided
   }
 
   if (type.startsWith("video/")) {
@@ -20,7 +20,7 @@ const MediaDisplay = ({ src, type, style }) => {
         src={src}
         type={type}
         style={style}
-        alt="can't display audio?"
+        alt="can't display audio"
       />
     );
   }
