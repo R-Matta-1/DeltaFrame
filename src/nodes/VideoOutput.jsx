@@ -211,8 +211,6 @@ export default function VideoOutput({ id, x, y, Data }) {
       filter = "";
     }
 
-    input = input.replace("-ss 0", "");
-
     return [
       FFMinputFiles,
       input,

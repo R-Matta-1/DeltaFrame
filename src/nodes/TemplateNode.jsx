@@ -30,7 +30,13 @@ const TemplateNodeCreator = (label, placeholder, Tutorial, handles) => {
         }}
         className="react-flow__node-default"
       >
-        <p style={{ marginBottom: "0", font: "16px Arial, sans-serif" }}>
+        <p
+          style={{
+            marginBottom: "0",
+            font: "25px Arial, sans-serif",
+            marginTop: "3px",
+          }}
+        >
           {label}
         </p>
         <textarea

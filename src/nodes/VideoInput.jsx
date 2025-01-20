@@ -9,6 +9,10 @@ function VideoInput({ id, Data }) {
   const [ShowMedia, setShowMedia] = useState(false);
   const [VideoLink, setVideoLink] = useState("");
   const [File, setFile] = useState("");
+  const [MediaDimensions, setMediaDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
   const inputRef = useRef(null);
   const SliderRef = useRef(null);
   const videoRef = useRef(null);
@@ -34,6 +38,7 @@ function VideoInput({ id, Data }) {
       fileBlobUrl: InputVideoURL,
       file: File,
       StartTime: 0,
+      MediaDimensions: MediaDimensions,
     });
     console.log(File);
   }, [File]);
@@ -131,13 +136,20 @@ function VideoInput({ id, Data }) {
             ref={videoRef}
             onLoadedMetadata={() => {
               setVideoLength(videoRef.current.duration);
+              setMediaDimensions({
+                width: videoRef.current.videoWidth,
+                height: videoRef.current.videoHeight,
+              });
             }}
             src={VideoLink}
           >
             needs video suprt
           </video>
           <br />
-          <label style={{ fontFamily: "Arial, sans-serif" }} htmlFor="in">
+          <label
+            style={{ fontFamily: "Arial, sans-serif", marginBottom: "3px" }}
+            htmlFor="in"
+          >
             -ss
           </label>
           <input
@@ -149,15 +161,32 @@ function VideoInput({ id, Data }) {
             name="in"
             ref={SliderRef}
             onChange={sliderInputHandle}
+            style={{ marginBottom: "3px" }}
           />
+          <p
+            style={{ marginTop: "3px" }}
+          >{`${MediaDimensions.width} x ${MediaDimensions.height}`}</p>
         </>
       )}
       {VideoLink && File.type.startsWith("image") && (
-        <img
-          src={VideoLink}
-          type={File.type}
-          style={{ maxHeight: "calc(100% - 20px)", maxWidth: "100%" }}
-        />
+        <>
+          <img
+            src={VideoLink}
+            type={File.type}
+            style={{ maxHeight: "calc(100% - 20px)", maxWidth: "100%" }}
+            ref={videoRef}
+            onLoad={() => {
+              console.log(videoRef.current);
+              setMediaDimensions({
+                width: videoRef.current.naturalWidth,
+                height: videoRef.current.naturalHeight,
+              });
+            }}
+          />
+          <p
+            style={{ marginTop: "3px" }}
+          >{`${MediaDimensions.width} x ${MediaDimensions.height}`}</p>
+        </>
       )}
 
       {!VideoLink && (
