@@ -130,7 +130,7 @@ function VideoInput({ id, Data }) {
             controls={ShowMedia || File.type.startsWith("audio")}
             style={{
               marginTop: "15px",
-              maxHeight: "calc(100% - 40px)",
+              maxHeight: "calc(100% - 50px)",
               maxWidth: "100%",
             }}
             ref={videoRef}
@@ -147,7 +147,7 @@ function VideoInput({ id, Data }) {
           </video>
           <br />
           <label
-            style={{ fontFamily: "Arial, sans-serif", marginBottom: "3px" }}
+            style={{ fontFamily: "Arial, sans-serif", marginBottom: "0px" }}
             htmlFor="in"
           >
             -ss
@@ -161,10 +161,14 @@ function VideoInput({ id, Data }) {
             name="in"
             ref={SliderRef}
             onChange={sliderInputHandle}
-            style={{ marginBottom: "3px" }}
+            style={{ marginBottom: "0px" }}
           />
           <p
-            style={{ marginTop: "3px" }}
+            style={{
+              marginTop: "0px",
+              fontFamily: "monospace",
+              fontSize: "20px",
+            }}
           >{`${MediaDimensions.width} x ${MediaDimensions.height}`}</p>
         </>
       )}

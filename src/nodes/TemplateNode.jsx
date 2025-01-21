@@ -53,7 +53,7 @@ const TemplateNodeCreator = (label, placeholder, Tutorial, handles) => {
         />
         <br></br>
         <button onClick={() => setTutorialOpen(!tutorialOpen)}>
-          {tutorialOpen ? "Close" : "Open"} Tutorial
+          {tutorialOpen ? "Close" : "Open"} Reference
         </button>
         {tutorialOpen && (
           <div
